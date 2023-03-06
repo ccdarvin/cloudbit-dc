@@ -123,7 +123,7 @@ export const EditDrawer: React.FC<IEditDrawerProps> = ({
             />
         </>
     )
-    
+
     return (
         <Drawer
             mask={false}
