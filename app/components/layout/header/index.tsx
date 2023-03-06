@@ -23,6 +23,7 @@ export const Header: React.FC = () => {
         alignItems: "center",
         padding: "0px 24px",
         height: "64px",
+        backgroundColor: "transparent"
       }}
     >
       <Switch

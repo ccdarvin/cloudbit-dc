@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node";
+import { json, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -6,6 +6,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 
 import { Refine } from "@pankod/refine-core";
@@ -17,14 +18,14 @@ import {
 } from "@pankod/refine-antd";
 
 import routerProvider from "@pankod/refine-remix-router";
-
+import { checkAuthentication } from "@pankod/refine-remix-router";
 import { DataProvider } from "@pankod/refine-strapi-v4";
 import resetStyle from "@pankod/refine-antd/dist/reset.css";
-import { AntdInferencer } from "@pankod/refine-inferencer/antd";
-import { RefineKbarProvider } from "@pankod/refine-kbar";
+import { RefineKbarProvider } from "@pankod/refine-kbar"
 import { authProvider, axiosInstance } from "~/authProvider";
-import { API_URL } from "~/constants";
+import { API_URL, TOKEN_KEY } from "~/constants";
 import { ColorModeContextProvider } from "@contexts";
+import * as cookie from "cookie";
 import {
   Title,
   Header,
@@ -34,15 +35,35 @@ import {
   OffLayoutArea,
 } from "~/components/layout";
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "New Remix + Refine App",
-  viewport: "width=device-width,initial-scale=1",
-});
+export const meta: V2_MetaFunction = () => ([
+  {
+    title: "Cloudbit App",
+  },{
+    name: "viewport",
+    content: "width=device-width, initial-scale=1",
+  }, {
+    name: "charset",
+    content: "utf-8",
+  }
+]);
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "")
+  const token = parsedCookie[TOKEN_KEY]
+  return json({ 
+    token
+  });
+}
 
 export default function App() {
+  const { token } = useLoaderData()
+  if (token) {
+    axiosInstance.defaults.headers.common = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <Meta />
         <Links />
@@ -58,16 +79,27 @@ export default function App() {
               notificationProvider={notificationProvider}
               ReadyPage={ReadyPage}
               catchAll={<ErrorComponent />}
-              resources={[
-                {
-                  name: "posts",
-                  list: AntdInferencer,
-                  edit: AntdInferencer,
-                  show: AntdInferencer,
-                  create: AntdInferencer,
-                  canDelete: true,
+              resources={[{
+                name: "dc-doctors",
+                options: {
+                  label: "Doctores",
+                  route: "doctors",
                 },
-              ]}
+                list: () => null,
+                create: () => null,
+                edit: () => null,
+                show: () => null,
+              }, {
+                name: "dc-patients",
+                options: {
+                  label: "Pacientes",
+                  route: "patients",
+                },
+                list: () => null,
+                create: () => null,
+                edit: () => null,
+              }
+            ]}
               Title={Title}
               Header={Header}
               Sider={Sider}

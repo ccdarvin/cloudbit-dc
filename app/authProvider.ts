@@ -1,16 +1,27 @@
+import { AuthHelper, DataProvider } from "@pankod/refine-strapi-v4";
+import { checkAuthentication } from "@pankod/refine-remix-router";
 import { AuthProvider } from "@pankod/refine-core";
-import { AuthHelper } from "@pankod/refine-strapi-v4";
-import axios from "axios";
-import Cookies from "js-cookie";
-import * as cookie from "cookie";
-
 import { TOKEN_KEY, API_URL } from "~/constants";
+import * as cookie from "cookie";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 export const axiosInstance = axios.create();
 const strapiAuthHelper = AuthHelper(API_URL + "/api");
 
+export const getAxiosInstance = (request: any) => {
+  const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "")
+  const token = parsedCookie[TOKEN_KEY]
+  if (token) {
+    axiosInstance.defaults.headers.common = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+  return axiosInstance
+}
+
 export const authProvider: AuthProvider = {
-  login: async ({ username, password }) => {
+  login: async ({ email: username, password }) => {
     const { data, status } = await strapiAuthHelper.login(username, password);
     if (status === 200) {
       Cookies.set(TOKEN_KEY, data.jwt);

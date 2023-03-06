@@ -14,7 +14,9 @@ import { API_URL, TOKEN_KEY } from "~/constants";
 export const loader: LoaderFunction = async ({ params, request }) => {
   await checkAuthentication(authProvider, request);
 
-  const { resource } = params;
+  // get last segment of url
+  const resource = params.resource || request.url.split("/").pop();
+  
   const url = new URL(request.url);
 
   const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "");
@@ -23,11 +25,16 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   if (token) {
     axiosInstance.defaults.headers.common = {
       Authorization: `Bearer ${token}`,
+      origin: request.url,
     };
   }
 
-  const { parsedCurrent, parsedPageSize, parsedSorter, parsedFilters } =
-    parseTableParams(url.search);
+  const { 
+    parsedCurrent, 
+    parsedPageSize, 
+    parsedSorter, 
+    parsedFilters 
+  } = parseTableParams(url.search)
 
   try {
     const data = await DataProvider(API_URL + "/api", axiosInstance).getList({
@@ -39,7 +46,6 @@ export const loader: LoaderFunction = async ({ params, request }) => {
       },
       sort: parsedSorter,
     });
-
     return json({ initialData: data });
   } catch (error) {
     return json({});
