@@ -101,6 +101,7 @@ export const Sider: typeof DefaultSider = ({ render }) => {
     });
   };
 
+
   const logout: MenuProps['items'] = isExistAuthentication ? [{
     key: 'logout',
     icon: <LogoutOutlined />,
@@ -119,21 +120,30 @@ export const Sider: typeof DefaultSider = ({ render }) => {
      }
   ] : [];
 
-  const items = renderTreeView(menuItems, selectedKey);
+  //const items = renderTreeView(menuItems, selectedKey);
+
+  const items: MenuProps['items'] = [
+    {
+      key: 'patient',
+      icon: <UnorderedListOutlined />,
+      title: translate("patient.title", "Patient"),
+      label: <Link to="/patient">{translate("patient.title", "Patient")}</Link>
+    }
+  ]
 
   const renderSider = () => {
     if (render) {
       return [
         ...dashboard,
-        //items,
-        ...logout,
+        ...items,
+        //...logout,
         //collapsed,
       ];
     }
     return [
       ...dashboard,
-      //items
-      ...logout
+      ...items,
+      //...logout
     ]
   }
 
@@ -143,16 +153,14 @@ export const Sider: typeof DefaultSider = ({ render }) => {
         selectedKeys={[selectedKey]}
         defaultOpenKeys={defaultOpenKeys}
         mode="inline"
-        //items={renderSider()}
+        items={renderSider()}
         onClick={() => {
           setDrawerOpen(false);
           if (!breakpoint.lg) {
             setCollapsed(true);
           }
         }}
-      >
-        {items}
-      </Menu>
+      />
     );
   };
 

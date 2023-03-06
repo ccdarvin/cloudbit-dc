@@ -17,14 +17,24 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Patients() {
     const { initialData } = useLoaderData()
-    const { tableProps } = useTable({
+    const { tableProps, tableQueryResult } = useTable({
         resource: RESOURCE,
         queryOptions: {
             initialData,
         }
     })
     return <LayoutWrapper>
-        <List>
+        <List
+            headerButtons={[
+                <Button key="create" 
+                    loading={tableQueryResult.isRefetching || tableQueryResult.isLoading}
+                    icon={<Icons.Loading3QuartersOutlined />}
+                    onClick={() => tableQueryResult.refetch()}
+                >
+                    Refrescar
+                </Button>
+            ]}
+        >
             <Table 
                 {...tableProps} rowKey="id"
                 columns={[

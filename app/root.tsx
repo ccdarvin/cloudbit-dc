@@ -80,16 +80,6 @@ export default function App() {
               ReadyPage={ReadyPage}
               catchAll={<ErrorComponent />}
               resources={[{
-                name: "dc-doctors",
-                options: {
-                  label: "Doctores",
-                  route: "doctors",
-                },
-                list: () => null,
-                create: () => null,
-                edit: () => null,
-                show: () => null,
-              }, {
                 name: "dc-patients",
                 options: {
                   label: "Pacientes",

@@ -1,10 +1,9 @@
-import PatientsForm from "~/components/patients/form"
-import { useDrawerForm } from "@pankod/refine-antd"
-import { EditDrawer } from "~/components/crud"
+import { useForm } from "@pankod/refine-antd"
 import { useLoaderData, useParams } from "@remix-run/react"
-import { useEffect } from "react"
-import { loaderOne } from "~/utils"
 import { json, LoaderFunction } from "@remix-run/node"
+import PatientsForm from "~/components/patients/form"
+import { loaderOne } from "~/utils"
+import EditDrawer from "~/components/crud/EditDrawer"
 
 const RESOURCE = "dc-patients"
 
@@ -22,29 +21,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export default function EditPage() {
     const { id } = useParams()
     const { initialData } = useLoaderData()
-    const { formProps, drawerProps, saveButtonProps, show, queryResult } = useDrawerForm({
+    const { formProps, saveButtonProps } = useForm({
         action: "edit",
         resource: RESOURCE,
         id,
-        metaData: {
-            populate: ["country"],
-        },
         queryOptions: {
-            initialData,
+            initialData
         }
     })
-    useEffect(() => {
-        show()
-    }, [])
-    console.log(saveButtonProps)
     return <div>
         <EditDrawer
-            saveButtonProps={saveButtonProps} drawerProps={{...drawerProps}}
-            isLoading={queryResult?.isLoading}
+            open={true}
+            saveButtonProps={saveButtonProps}
         >
-            <PatientsForm formProps={{
-                ...formProps
-            }} />
+            <PatientsForm formProps={formProps}  />
         </EditDrawer>
     </div>
 }

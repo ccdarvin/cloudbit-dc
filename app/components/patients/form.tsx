@@ -1,5 +1,5 @@
 
-import { Form, Input, useSelect, Select, DatePicker, Space, Divider } from "@pankod/refine-antd";
+import { Form, Input, useSelect, Select, DatePicker, Space, Divider } from "@pankod/refine-antd"
 import dayjs from "dayjs";
 
 export default function PatientsForm(
@@ -46,7 +46,7 @@ export default function PatientsForm(
                 value: value ? dayjs(value) : undefined,
             })}
         >
-            <DatePicker style={{width: '100%'}} />
+            <DatePicker style={{width: '100%'}}  />
         </Form.Item>
         <Form.Item
             label="Sexo"

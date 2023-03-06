@@ -1,197 +1,52 @@
-import React from "react";
-
-import { Space, Spin, Drawer } from "antd";
-import {
-    useResourceWithRoute,
-    useMutationMode,
-    useNavigation,
-    useTranslate,
-    useRouterContext,
-    userFriendlyResourceName,
-    ResourceRouterParams,
-    useRefineContext,
-} from "@pankod/refine-core";
-
-import {
-    DeleteButton,
-    RefreshButton,
-    ListButton,
-    SaveButton,
-    Breadcrumb,
-    PageHeader,
-} from "@pankod/refine-antd";
-import { EditProps } from "@pankod/refine-antd";
+import { SaveButton } from "@pankod/refine-antd"
+import { useNavigate } from "@remix-run/react"
+import { Drawer, Space, Spin } from "antd"
+import { useEffect, useState } from "react"
 
 
-
-interface IEditDrawerProps extends EditProps {
-    drawerProps?: any;
-    open?: boolean;
-    onClose?: () => void;
-}
-
-
-/**
- * `<Edit>` provides us a layout for displaying the page.
- * It does not contain any logic but adds extra functionalities like a refresh button.
- *
- * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/basic-views/edit} for more details.
- */
-export const EditDrawer: React.FC<IEditDrawerProps> = ({
-    title,
-    saveButtonProps,
-    mutationMode: mutationModeProp,
-    recordItemId,
+export default function EditDrawer ({
     children,
-    deleteButtonProps,
-    canDelete,
-    resource: resourceFromProps,
-    isLoading = false,
-    dataProviderName,
-    breadcrumb: breadcrumbFromProps,
-    wrapperProps,
-    headerProps,
-    contentProps,
-    headerButtonProps,
-    headerButtons,
-    footerButtonProps,
-    footerButtons,
-    goBack: goBackFromProps=false,
-    drawerProps,
-}) => {
-    const translate = useTranslate()
-    const { goBack, list } = useNavigation()
-    const resourceWithRoute = useResourceWithRoute()
+    back=true,
+    title,
+    size = "large",
+    open,
+    onClose,
+    saveButtonProps,
+}: {
+    children: React.ReactNode
+    open: boolean
+    back?: boolean
+    title?: string
+    size?: "default" | "large" 
+    onClose?: () => void,
+    saveButtonProps?: any
+}) {
+    const [_open, setOpen] = useState(false)
+    useEffect(() => {
+        setOpen(open)
+    }, [open])
+    const navigate = useNavigate()
 
-    const { mutationMode: mutationModeContext } = useMutationMode()
-
-    const mutationMode = mutationModeProp ?? mutationModeContext
-
-    const { useParams } = useRouterContext()
-
-    const {
-        resource: routeResourceName,
-        action: routeFromAction,
-        id: idFromRoute,
-    } = useParams<ResourceRouterParams>()
-
-    const resource = resourceWithRoute(resourceFromProps ?? routeResourceName)
-    const isDeleteButtonVisible =
-        canDelete ?? (resource.canDelete || deleteButtonProps)
-
-    const { options } = useRefineContext()
-    const breadcrumb =
-        typeof breadcrumbFromProps === "undefined"
-            ? options?.breadcrumb
-            : breadcrumbFromProps
-
-    const id = recordItemId ?? idFromRoute
-
-    const defaultHeaderButtons = (
-        <>
-            {!recordItemId && (
-                <ListButton
-                    {...(isLoading ? { disabled: true } : {})}
-                    resourceNameOrRouteName={resource.route}
-                />
-            )}
-            <RefreshButton
-                {...(isLoading ? { disabled: true } : {})}
-                resourceNameOrRouteName={resource.route}
-                recordItemId={id}
-                dataProviderName={dataProviderName}
-            />
-        </>
-    )
-
-    const defaultFooterButtons = (
-        <>
-            {isDeleteButtonVisible && (
-                <DeleteButton
-                    {...(isLoading ? { disabled: true } : {})}
-                    mutationMode={mutationMode}
-                    onSuccess={() => {
-                        list(resource.route ?? resource.name);
-                    }}
-                    dataProviderName={dataProviderName}
-                    {...deleteButtonProps}
-                />
-            )}
+    return <Drawer
+        title={title}
+        placement="right"
+        size={size}
+        mask={false}
+        open={_open}
+        onClose={() => {
+            if (back) {
+                navigate(-1)
+            }
+            onClose?.()
+        }}
+        footer={<Space>
             <SaveButton
-                {...(isLoading ? { disabled: true } : {})}
-                {...saveButtonProps}
-            />
-        </>
-    )
-
-    return (
-        <Drawer
-            mask={false}
-            size="large"
-            open={drawerProps.open}
-            title={
-                title ??
-                translate(
-                    `${resource.name}.titles.edit`,
-                    `Edit ${userFriendlyResourceName(
-                        resource.label ?? resource.name,
-                        "singular",
-                    )}`,
-                )
-            }
-            extra={
-                <Space wrap {...(headerButtonProps ?? {})}>
-                    {headerButtons
-                        ? typeof headerButtons === "function"
-                            ? headerButtons({
-                                  defaultButtons: defaultHeaderButtons,
-                              })
-                            : headerButtons
-                        : defaultHeaderButtons}
-                </Space>
-            }
-            footer={[
-                <Space
-                    key="footer-buttons"
-                    wrap
-                    style={{
-                        float: "right",
-                        marginRight: 24,
-                    }}
-                    {...(footerButtonProps ?? {})}
-                >
-                    {footerButtons
-                        ? typeof footerButtons === "function"
-                            ? footerButtons({
-                                  defaultButtons:
-                                      defaultFooterButtons,
-                              })
-                            : footerButtons
-                        : defaultFooterButtons}
-                </Space>,
-            ]}
-        >
-            <PageHeader
-                ghost={true}
-                backIcon={goBackFromProps}
-                onBack={routeFromAction ? goBack : undefined}
-                breadcrumb={
-                    typeof breadcrumb !== "undefined" ? (
-                        <>{breadcrumb}</> ?? undefined
-                    ) : (
-                        <Breadcrumb />
-                    )
-                }
-                {...(headerProps ?? {})}
-            >
-                <Spin spinning={isLoading}>
-                    <div
-                        {...(contentProps ?? {})}
-                    >
-                        {children}
-                    </div>
-                </Spin>
-            </PageHeader>
-        </Drawer>
-    )
+                loading={saveButtonProps?.disabled}
+                {...saveButtonProps} />
+        </Space>}
+    >
+        <Spin spinning={saveButtonProps?.disabled} >
+        {children}
+        </Spin>
+    </Drawer>
 }
