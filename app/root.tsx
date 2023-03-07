@@ -7,8 +7,9 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
 } from "@remix-run/react";
-
+import {AnimatePresence, motion} from 'framer-motion'
 import { Refine } from "@pankod/refine-core";
 import {
   AuthPage,
@@ -64,6 +65,7 @@ export default function App() {
       Authorization: `Bearer ${token}`,
     };
   }
+  const location = useLocation();
   return (
     <html lang="es">
       <head>

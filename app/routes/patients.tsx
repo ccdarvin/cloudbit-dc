@@ -1,4 +1,4 @@
-import { List, Table, useTable, Tooltip, Space, Button, Icons, CreateButton } from "@pankod/refine-antd";
+import { List, Table, useTable, Tooltip, Space, Button, Icons, CreateButton, Dropdown } from "@pankod/refine-antd";
 import { json, LoaderFunction } from "@remix-run/node"
 import { LayoutWrapper } from "@pankod/refine-core"
 import { Link, Outlet, useLoaderData } from "@remix-run/react"
@@ -23,13 +23,12 @@ export default function Patients() {
             initialData,
         }
     })
-    tableProps.loading = tableQueryResult.isRefetching || tableQueryResult.isLoading
     return <LayoutWrapper>
         <List
             headerButtons={[
                 <CreateButton key="create" resourceNameOrRouteName={RESOURCE} />,
                 <Button key="refresh"
-                    loading={tableProps.loading}
+                    loading={tableQueryResult.isRefetching}
                     icon={<Icons.Loading3QuartersOutlined />}
                     onClick={() => tableQueryResult.refetch()}
                 >
@@ -42,9 +41,9 @@ export default function Patients() {
                 columns={[
                     {
                         title: "Name",
-                        render: (_, record) => <>
+                        render: (_, record) => <Link to={`/patients/${record.id}`}>
                             {record.firstName} {record.lastName}
-                        </>
+                        </Link>
                     },
                     {
                         title: "Correo electrónico",
@@ -68,9 +67,30 @@ export default function Patients() {
                     {
                         dataIndex: "actions",
                         render: (_, record) => <Space>
-                            <Link to={`${record.id}/edit`}>
-                                <Button type="link" size="small" icon={<Icons.EditOutlined />} />
-                            </Link>
+                            <Dropdown
+                                menu={{
+                                    items: [
+                                        {
+                                            key: "view",
+                                            label: <Link to={`/patients/${record.id}`}>Ver</Link>,
+                                            icon: <Icons.EyeOutlined />,
+                                        },
+                                        {
+                                            key: "edit",
+                                            label: <Link to={`/patients/${record.id}/edit`}>Editar</Link>,
+                                            icon: <Icons.EditOutlined />,
+                                        },
+                                        {
+                                            key: "delete",
+                                            label: <Link to={`/patients/${record.id}/delete`}>Eliminar</Link>,
+                                            icon: <Icons.DeleteOutlined />,
+                                            danger: true,
+                                        }
+                                    ]
+                                }}   
+                            >
+                                <Button type="link" size="large" icon={<Icons.MoreOutlined />} />
+                            </Dropdown>
                         </Space>
                     }
                 ]}

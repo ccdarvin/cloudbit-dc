@@ -8,26 +8,26 @@ import EditDrawer from "~/components/crud/EditDrawer"
 const RESOURCE = "dc-patients"
 
 
-//export const loader: LoaderFunction = async ({ request, params }) => {
-//    const data = await loaderOne({
-//        resource: RESOURCE,
-//        request,
-//        id: params.id,
-//    })
-//    return json(data)
-//}
+export const loader: LoaderFunction = async ({ request, params }) => {
+    const data = await loaderOne({
+        resource: RESOURCE,
+        request,
+        id: params.id,
+    })
+    return json(data)
+}
 
 
 export default function EditPage() {
     const { id } = useParams()
-    //const { initialData } = useLoaderData()
+    const { initialData } = useLoaderData()
     const { formProps, saveButtonProps } = useForm({
         action: "edit",
         resource: RESOURCE,
         id,
-        //queryOptions: {
-        //    initialData
-        //}
+        queryOptions: {
+            initialData
+        }
     })
     return <div>
         <EditDrawer
