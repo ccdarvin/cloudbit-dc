@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Col, Descriptions, Divider, EditButton, Icons, Row, Space, Typography, useForm } from "@pankod/refine-antd"
+import { Avatar, Button, Card, Col, Descriptions, Divider, EditButton, Icons, Row, Space, Spin, Typography, useForm } from "@pankod/refine-antd"
 import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react"
 import { json, LoaderFunction } from "@remix-run/node"
 import { loaderOne } from "~/utils"
@@ -21,7 +21,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export default function EditPage() {
     const { id } = useParams()
     const { initialData } = useLoaderData()
-    const { data }: any = useOne({
+    const { data, isRefetching }: any = useOne({
         resource: RESOURCE,
         id: id as string,
         queryOptions: {
@@ -41,12 +41,14 @@ export default function EditPage() {
                 display: 'flex',
                 alignItems: 'initial',
             }}>
-                <Space direction="vertical" style={{minWidth: '15rem'}} align="center">
-                    <Avatar size={128} icon={<Icons.UserOutlined />} />
-                    <Space>
-                        <Typography.Text strong>{patient?.firstName} {patient?.lastName}</Typography.Text>
+                <Spin spinning={isRefetching}>
+                    <Space direction="vertical" style={{minWidth: '15rem'}} align="center">
+                        <Avatar size={128} icon={<Icons.UserOutlined />} />
+                        <Space>
+                            <Typography.Text strong>{patient?.firstName} {patient?.lastName}</Typography.Text>
+                        </Space>
                     </Space>
-                </Space>
+                </Spin>
                 <Divider type="vertical" style={{ height: '100%' }}/>
                 <Descriptions column={2}>
                     <Descriptions.Item label="Edad">
