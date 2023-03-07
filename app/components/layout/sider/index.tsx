@@ -124,11 +124,28 @@ export const Sider: typeof DefaultSider = ({ render }) => {
 
   const items: MenuProps['items'] = [
     {
-      key: 'patient',
-      icon: <UnorderedListOutlined />,
-      title: translate("patient.title", "Patient"),
-      label: <Link to="/patient">{translate("patient.title", "Patient")}</Link>
-    }
+      key: 'patients',
+      icon: <Icons.CaretRightOutlined />,
+      title: translate("patients.title", "Pacientes"),
+      label: <Link to="/patients">{translate("patients.title", "Patient")}</Link>
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'settings',
+      icon: <Icons.SettingOutlined />,
+      title: translate("settings.title", "Configuración"),
+      label: translate("settings.title", "Configuración"),
+      children: [
+        {
+          key: 'doctors',
+          icon: <Icons.LineOutlined />,
+          title: translate("doctors.title", "Médicos"),
+          label: <Link to="/doctors">{translate("doctors.title", "Doctor")}</Link>
+        }
+      ]
+    },
   ]
 
   const renderSider = () => {

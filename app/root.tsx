@@ -88,6 +88,16 @@ export default function App() {
                 list: () => null,
                 create: () => null,
                 edit: () => null,
+              },
+              {
+                name: "dc-doctors",
+                options: {
+                  label: "Doctores",
+                  route: "doctors",
+                },
+                list: () => null,
+                create: () => null,
+                edit: () => null,
               }
             ]}
               Title={Title}

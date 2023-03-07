@@ -1,11 +1,11 @@
-import { List, Table, useTable, Tooltip, Space, Button, Icons } from "@pankod/refine-antd";
+import { List, Table, useTable, Tooltip, Space, Button, Icons, CreateButton } from "@pankod/refine-antd";
 import { json, LoaderFunction } from "@remix-run/node"
 import { LayoutWrapper } from "@pankod/refine-core"
 import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { loaderList } from "~/utils"
 import dayjs from "dayjs"
 
-const RESOURCE = "dc-patients"
+const RESOURCE = "dc-doctors"
 
 export const loader: LoaderFunction = async ({ request }) => {
     const data = await loaderList({
@@ -27,7 +27,8 @@ export default function Patients() {
     return <LayoutWrapper>
         <List
             headerButtons={[
-                <Button key="create" 
+                <CreateButton key="create" resourceNameOrRouteName={RESOURCE}/>,
+                <Button key="refresh"
                     loading={tableProps.loading}
                     icon={<Icons.Loading3QuartersOutlined />}
                     onClick={() => tableQueryResult.refetch()}
