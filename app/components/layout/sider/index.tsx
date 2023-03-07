@@ -215,8 +215,7 @@ export const Sider: typeof DefaultSider = ({ render }) => {
       return renderDrawerSider();
     }
 
-    return (
-      <AntdLayout.Sider
+    return <AntdLayout.Sider
       style={{ backgroundColor: "transparent" }}
         collapsible
         collapsed={collapsed}
@@ -227,8 +226,7 @@ export const Sider: typeof DefaultSider = ({ render }) => {
         <RenderToTitle collapsed={collapsed} />
         {renderMenu()}
       </AntdLayout.Sider>
-    );
-  };
+  }
 
   return renderContent()
 };

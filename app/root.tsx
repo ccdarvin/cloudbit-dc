@@ -50,13 +50,15 @@ export const meta: V2_MetaFunction = () => ([
 export const loader = async ({ request }: LoaderArgs) => {
   const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "")
   const token = parsedCookie[TOKEN_KEY]
+  const theme = parsedCookie["theme"]
   return json({ 
-    token
+    token,
+    theme
   });
 }
 
 export default function App() {
-  const { token } = useLoaderData()
+  const { token, theme } = useLoaderData()
   if (token) {
     axiosInstance.defaults.headers.common = {
       Authorization: `Bearer ${token}`,
@@ -94,6 +96,16 @@ export default function App() {
                 options: {
                   label: "Doctores",
                   route: "doctors",
+                },
+                list: () => null,
+                create: () => null,
+                edit: () => null,
+              },
+              {
+                name: "dc-treatments",
+                options: {
+                  label: "Tratamientos",
+                  route: "treatments",
                 },
                 list: () => null,
                 create: () => null,
