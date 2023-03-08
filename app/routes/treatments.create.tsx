@@ -1,0 +1,22 @@
+import { useForm } from "@pankod/refine-antd"
+import CreateDrawer from "~/components/crud/CreateDrawer"
+import TreatmentForm from "~/components/treatments/form"
+
+
+const RESOURCE = "dc-treatments"
+
+export default function Patients() {
+    const { formProps, saveButtonProps } = useForm({
+        action: "create",
+        resource: RESOURCE,
+    })
+
+    return <div>
+        <CreateDrawer
+            open={true}
+            saveButtonProps={saveButtonProps}
+        >
+            <TreatmentForm formProps={formProps} />
+        </CreateDrawer>
+    </div>
+}
