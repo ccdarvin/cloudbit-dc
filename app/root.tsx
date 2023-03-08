@@ -112,6 +112,14 @@ export default function App() {
                 list: () => null,
                 create: () => null,
                 edit: () => null,
+              },
+              {
+                name: "dc-procedures",
+                options: {
+                  label: "Procedimientos",
+                  route: "procedures",
+                },
+                list: () => null,
               }
             ]}
               Title={Title}

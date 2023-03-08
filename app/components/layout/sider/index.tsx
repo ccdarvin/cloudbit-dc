@@ -23,6 +23,7 @@ import {
 import { Title as DefaultTitle } from "../title";
 import { drawerButtonStyles } from "./styles";
 import type { MenuProps } from 'antd';
+import { PatientIcon, TreatmentIcon } from "~/components/icons";
 
 const {
   UnorderedListOutlined,
@@ -125,15 +126,15 @@ export const Sider: typeof DefaultSider = ({ render }) => {
   const items: MenuProps['items'] = [
     {
       key: 'patients',
-      icon: <Icons.CaretRightOutlined />,
+      icon: <PatientIcon />,
       title: translate("patients.title", "Pacientes"),
-      label: <Link to="/patients">{translate("patients.title", "Patient")}</Link>
+      label: <Link to="/patients">{translate("patients.title", "Pacientes")}</Link>
     },
     {
       key: 'treatments',
-      icon: <Icons.CaretRightOutlined />,
+      icon: <TreatmentIcon/>,
       title: translate("treatments.title", "Tratamientos"),
-      label: <Link to="/treatments">{translate("treatments.title", "Treatment")}</Link>
+      label: <Link to="/treatments">{translate("treatments.title", "Tratamientos")}</Link>
     },
     {
       type: 'divider',
@@ -149,7 +150,13 @@ export const Sider: typeof DefaultSider = ({ render }) => {
           icon: <Icons.LineOutlined />,
           title: translate("doctors.title", "Médicos"),
           label: <Link to="/doctors">{translate("doctors.title", "Doctor")}</Link>
-        }
+        },
+        {
+          key: 'procedures',
+          icon: <Icons.LineOutlined />,
+          title: translate("procedures.title", "Procedimientos"),
+          label: <Link to="/procedures">{translate("procedures.title", "Procedimientos")}</Link>
+        },
       ]
     },
   ]

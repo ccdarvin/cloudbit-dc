@@ -1,5 +1,4 @@
 import { useForm } from "@pankod/refine-antd"
-import { useParams } from "@remix-run/react"
 import CreateDrawer from "~/components/crud/CreateDrawer"
 import TreatmentForm from "~/components/treatments/form"
 
@@ -7,14 +6,10 @@ import TreatmentForm from "~/components/treatments/form"
 const RESOURCE = "dc-treatments"
 
 export default function Patients() {
-    const { id } = useParams<{ id: string }>()
     const { formProps, saveButtonProps } = useForm({
-        action: "edit",
+        action: "create",
         resource: RESOURCE,
-        id,
-        metaData: {
-            populate: ['doctor', 'patient']
-        }
+        redirect: "show",
     })
 
     return <div>
