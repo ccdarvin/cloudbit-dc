@@ -130,6 +130,12 @@ export const Sider: typeof DefaultSider = ({ render }) => {
       label: <Link to="/patients">{translate("patients.title", "Patient")}</Link>
     },
     {
+      key: 'treatments',
+      icon: <Icons.CaretRightOutlined />,
+      title: translate("treatments.title", "Tratamientos"),
+      label: <Link to="/treatments">{translate("treatments.title", "Treatment")}</Link>
+    },
+    {
       type: 'divider',
     },
     {
@@ -216,7 +222,6 @@ export const Sider: typeof DefaultSider = ({ render }) => {
     }
 
     return <AntdLayout.Sider
-      style={{ backgroundColor: "transparent" }}
         collapsible
         collapsed={collapsed}
         onCollapse={(collapsed: boolean): void => setCollapsed(collapsed)}
