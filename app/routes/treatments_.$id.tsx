@@ -1,14 +1,18 @@
 import { Button, Card, Descriptions, Icons, Space, Form, Table, useForm } from "@pankod/refine-antd"
-import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react"
+import { Link, Outlet, useLoaderData, useParams, useSearchParams } from "@remix-run/react"
 import { loaderOne } from "~/utils"
 import { LayoutWrapper, useOne } from "@pankod/refine-core"
 import dayjs from "dayjs"
 import { CreateIcon } from "~/components/icons"
+import ProceduresTable from "~/components/treatments/ProceduresList"
+import { useEffect, useState } from "react"
 
 const RESOURCE = "dc-treatments"
 
 export default function EditPage() {
     const { id } = useParams<{ id: string }>()
+    const [items, setItems] = useState<any>([])
+
     const { formProps, saveButtonProps, queryResult } = useForm({
         action: "edit",
         resource: RESOURCE,
@@ -20,6 +24,7 @@ export default function EditPage() {
     })
 
     const treatment = queryResult?.data?.data
+    const [searchParams, setSearchParams] = useSearchParams()
 
     return <LayoutWrapper>
         <div style={{
@@ -75,17 +80,21 @@ export default function EditPage() {
                         ]}
                     />}
                     actions={[
-                        <Button key="1" type="text" icon={<CreateIcon />}>
-                            <Link to="items">Agregar procedimiento</Link>
+                        <Button key="1" type="text" icon={<CreateIcon />} onClick={() => {
+                            setSearchParams({ action: 'add-procedure' })
+                        }}>
+                            Agregar procedimiento
                         </Button>,
                     ]}
                 />
             </Form>
         </div>
         <div>
-            <Outlet context={{
-
-            }} />
+            {
+                searchParams.get('action') === 'add-procedure' && <ProceduresTable onAdd={(procedure: any) => { 
+                    setItems([...items, procedure])
+                }} />
+            }
         </div>
     </LayoutWrapper>
 }
