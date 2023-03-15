@@ -1,5 +1,5 @@
-import { Icons } from "@pankod/refine-antd"
-import { useCustomMutation } from "@pankod/refine-core"
+import * as Icons from "@ant-design/icons";
+import { useCustomMutation } from "@refinedev/core";
 import { Button, Popconfirm } from "antd"
 import { API_URL } from "~/constants"
 

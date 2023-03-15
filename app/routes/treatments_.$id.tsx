@@ -1,7 +1,13 @@
-import { Button, Card, Descriptions, Icons, Space, Form, Table, useForm, Input, InputNumber } from "@pankod/refine-antd"
+import { useForm } from "@refinedev/antd";
+
+// It is recommended to use explicit import as seen below to reduce bundle size.
+// import { IconName } from "@ant-design/icons";
+import * as Icons from "@ant-design/icons";
+
+import { Button, Card, Descriptions, Space, Form, Table, Input, InputNumber } from "antd";
 import { Link, Outlet, useLoaderData, useParams, useSearchParams } from "@remix-run/react"
 import { loaderOne } from "~/utils"
-import { LayoutWrapper, useOne } from "@pankod/refine-core"
+import { LayoutWrapper, useOne } from "@refinedev/core";
 import dayjs from "dayjs"
 import { CreateIcon } from "~/components/icons"
 import ProceduresTable from "~/components/treatments/ProceduresList"
@@ -17,7 +23,7 @@ export default function EditPage() {
         resource: RESOURCE,
         id,
         redirect: "show",
-        metaData: {
+        meta: {
             populate: ['doctor', 'patient', 'items']
         }
     })

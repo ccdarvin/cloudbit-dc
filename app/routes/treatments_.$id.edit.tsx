@@ -1,4 +1,4 @@
-import { useForm } from "@pankod/refine-antd"
+import { useForm } from "@refinedev/antd";
 import { useParams } from "@remix-run/react"
 import CreateDrawer from "~/components/crud/CreateDrawer"
 import TreatmentForm from "~/components/treatments/form"
@@ -13,7 +13,7 @@ export default function Patients() {
         resource: RESOURCE,
         id,
         redirect: "show",
-        metaData: {
+        meta: {
             populate: ['doctor', 'patient']
         }
     })

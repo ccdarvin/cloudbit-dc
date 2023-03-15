@@ -1,8 +1,8 @@
-export { RemixRouteComponent as default } from "@pankod/refine-remix-router"
-import { checkAuthentication } from "@pankod/refine-remix-router"
+export { RemixRouteComponent as default } from "@refinedev/remix-router/legacy";
+import { checkAuthentication } from "@refinedev/remix-router/legacy";
 import { authProvider, axiosInstance } from "~/authProvider"
-import { DataProvider } from "@pankod/refine-strapi-v4"
-import { parseTableParams } from "@pankod/refine-core"
+import { DataProvider } from "@refinedev/strapi-v4";
+import { parseTableParams } from "@refinedev/core";
 import { API_URL, TOKEN_KEY } from "~/constants"
 import * as cookie from "cookie"
 

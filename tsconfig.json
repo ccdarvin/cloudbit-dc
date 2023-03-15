@@ -21,9 +21,7 @@
       "@styles/*": ["./app/styles/*"],
       "@styles": ["./app/styles"],
       "@public/*": ["public/*"],
-      "@public": ["public"],
-      "@utils/*": ["./app/utils/*"],
-      "@utils": ["./app/utils"],
+      "@public": ["public"]
     },
     "noEmit": true
   }

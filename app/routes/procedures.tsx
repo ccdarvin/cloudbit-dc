@@ -1,5 +1,11 @@
-import { List, Table, useEditableTable, Space, Button, Icons, CreateButton, Title, EditButton, InputNumber, Form } from "@pankod/refine-antd"
-import { LayoutWrapper } from "@pankod/refine-core"
+import { List, useEditableTable, CreateButton, Title, EditButton } from "@refinedev/antd";
+
+// It is recommended to use explicit import as seen below to reduce bundle size.
+// import { IconName } from "@ant-design/icons";
+import * as Icons from "@ant-design/icons";
+
+import { Table, Space, Button, InputNumber, Form } from "antd";
+import { LayoutWrapper } from "@refinedev/core";
 import { Outlet } from "@remix-run/react"
 import LoadButton from "~/components/procedures/LoadButton"
 

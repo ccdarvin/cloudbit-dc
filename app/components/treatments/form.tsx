@@ -1,5 +1,6 @@
 
-import { Form, Input, useSelect, Select, Space } from "@pankod/refine-antd"
+import { useSelect } from "@refinedev/antd";
+import { Form, Input, Select, Space } from "antd";
 import dayjs from "dayjs";
 
 export default function TreatmentForm(
@@ -7,9 +8,17 @@ export default function TreatmentForm(
 ) {
     const { selectProps: patientsSelectProps, queryResult: patientsQueryResult } = useSelect({
         resource: "dc-patients",
+
+        pagination: {
+            mode: "server"
+        }
     })
     const { selectProps: doctorsSelectProps, queryResult: doctorsQueryResult } = useSelect({
         resource: "dc-doctors",
+
+        pagination: {
+            mode: "server"
+        }
     })
 
     return <Form {...formProps} layout="vertical">

@@ -1,4 +1,10 @@
-import { Table, useTable, Space, Button, Icons } from "@pankod/refine-antd"
+import { useTable } from "@refinedev/antd";
+
+// It is recommended to use explicit import as seen below to reduce bundle size.
+// import { IconName } from "@ant-design/icons";
+import * as Icons from "@ant-design/icons";
+
+import { Table, Space, Button } from "antd";
 import { Link } from "@remix-run/react"
 
 
@@ -11,16 +17,20 @@ export default function TreatmentTable({
 }) {
     const { tableProps, tableQueryResult } = useTable({
         resource: RESOURCE,
-        metaData: {
+
+        meta: {
             populate: ['doctor', 'patient']
         },
-        initialFilter: [
-            {
-                field: "patient.id",
-                operator: "eq",
-                value: patientId
-            }
-        ]
+
+        filters: {
+            initial: [
+                {
+                    field: "patient.id",
+                    operator: "eq",
+                    value: patientId
+                }
+            ]
+        }
     })
     return <Table 
         {...tableProps} rowKey="id"

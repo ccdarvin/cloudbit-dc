@@ -1,4 +1,4 @@
-import { json, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { json, LoaderArgs, V2_MetaFunction } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -7,34 +7,22 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useLocation,
-} from "@remix-run/react";
-import {AnimatePresence, motion} from 'framer-motion'
-import { Refine } from "@pankod/refine-core";
+} from "@remix-run/react"
+import { Refine } from "@refinedev/core"
 import {
   AuthPage,
   notificationProvider,
-  ReadyPage,
-  ErrorComponent,
-} from "@pankod/refine-antd";
+} from "@refinedev/antd"
 
-import routerProvider from "@pankod/refine-remix-router";
-import { checkAuthentication } from "@pankod/refine-remix-router";
-import { DataProvider } from "@pankod/refine-strapi-v4";
-import resetStyle from "@pankod/refine-antd/dist/reset.css";
-import { RefineKbarProvider } from "@pankod/refine-kbar"
-import { authProvider, axiosInstance } from "~/authProvider";
-import { API_URL, TOKEN_KEY } from "~/constants";
-import { ColorModeContextProvider } from "@contexts";
-import * as cookie from "cookie";
-import {
-  Title,
-  Header,
-  Sider,
-  Footer,
-  Layout,
-  OffLayoutArea,
-} from "~/components/layout";
+import routerProvider, { UnsavedChangesNotifier } from "@refinedev/remix-router"
+import { DataProvider } from "@refinedev/strapi-v4"
+import resetStyle from "@refinedev/antd/dist/reset.css"
+import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar"
+import { authProvider, axiosInstance } from "~/authProvider"
+import { API_URL, TOKEN_KEY } from "~/constants"
+import { ColorModeContextProvider } from "@contexts"
+import * as cookie from "cookie"
+import { PatientIcon, SettingsIcon, TreatmentIcon } from "./components/icons"
 
 export const meta: V2_MetaFunction = () => ([
   {
@@ -63,9 +51,9 @@ export default function App() {
   if (token) {
     axiosInstance.defaults.headers.common = {
       Authorization: `Bearer ${token}`,
-    };
+    }
   }
-  const location = useLocation();
+
   return (
     <html lang="es">
       <head>
@@ -73,41 +61,51 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <ColorModeContextProvider>
-          <RefineKbarProvider>
-            <Refine
+        <RefineKbarProvider>
+          <ColorModeContextProvider>
+            <RefineKbarProvider>
+              <Refine
               routerProvider={routerProvider}
               authProvider={authProvider}
               dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
               LoginPage={AuthPage}
               notificationProvider={notificationProvider}
-              ReadyPage={ReadyPage}
-              catchAll={<ErrorComponent />}
               resources={[{
                 name: "dc-patients",
-                options: {
+                list: '/patients',
+                create: '/patients/create',
+                edit: '/patients/:id/edit',
+                show: '/patients/:id',
+                meta: {
                   label: "Pacientes",
                   route: "patients",
+                  icon: <PatientIcon />,
                 },
-                list: () => null,
-                create: () => null,
-                edit: () => null,
-              },
-              {
-                name: "dc-doctors",
-                options: {
-                  label: "Doctores",
-                  route: "doctors",
-                },
-                list: () => null,
-                create: () => null,
-                edit: () => null,
               },
               {
                 name: "dc-treatments",
-                options: {
+                meta: {
                   label: "Tratamientos",
                   route: "treatments",
+                  icon: <TreatmentIcon />,
+                },
+                list: () => null,
+                create: () => null,
+                edit: () => null,
+              },
+              {
+                name: "settings",
+                meta: {
+                  label: "Configuraciones",
+                  icon: <SettingsIcon />,
+                }
+              },
+              {
+                name: "dc-doctors",
+                meta: {
+                  label: "Doctores",
+                  route: "doctors",
+                  parent: "settings",
                 },
                 list: () => null,
                 create: () => null,
@@ -115,24 +113,28 @@ export default function App() {
               },
               {
                 name: "dc-procedures",
-                options: {
+                meta: {
                   label: "Procedimientos",
                   route: "procedures",
+                  parent: "settings",
                 },
                 list: () => null,
               }
             ]}
-              Title={Title}
-              Header={Header}
-              Sider={Sider}
-              Footer={Footer}
-              Layout={Layout}
-              OffLayoutArea={OffLayoutArea}
+            options={{
+              syncWithLocation: true,
+              warnWhenUnsavedChanges: true,
+            }}
             >
-              <Outlet />
-            </Refine>
-          </RefineKbarProvider>
-        </ColorModeContextProvider>
+                <>
+                  <Outlet />
+                  <UnsavedChangesNotifier />
+                  <RefineKbar />
+                </>
+              </Refine>
+            </RefineKbarProvider>
+          </ColorModeContextProvider>
+        </RefineKbarProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

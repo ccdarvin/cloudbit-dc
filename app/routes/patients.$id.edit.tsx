@@ -1,4 +1,4 @@
-import { useForm } from "@pankod/refine-antd"
+import { useForm } from "@refinedev/antd";
 import { useLoaderData, useParams } from "@remix-run/react"
 import { json, LoaderFunction } from "@remix-run/node"
 import PatientsForm from "~/components/patients/form"

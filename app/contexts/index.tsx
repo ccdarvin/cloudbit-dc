@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { ConfigProvider, theme } from "@pankod/refine-antd";
+import { ConfigProvider, theme } from "antd";
 import { parseCookies, setCookie } from "nookies";
 import { geekblue as color } from '@ant-design/colors';
 
@@ -37,10 +37,8 @@ export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
   const setColorMode = () => {
     if (mode === "light") {
       setMode("dark");
-      setCookie(null, "theme", "dark")
     } else {
-      setMode("light")
-      setCookie(null, "theme", "light")
+      setMode("light");
     }
   };
 

@@ -1,5 +1,6 @@
 
-import { Form, Input, useSelect, Select, DatePicker, Space, Divider } from "@pankod/refine-antd"
+import { useSelect } from "@refinedev/antd";
+import { Form, Input, Select, DatePicker, Space, Divider } from "antd";
 import dayjs from "dayjs";
 
 export default function PatientsForm(
@@ -9,6 +10,10 @@ export default function PatientsForm(
         resource: "countries",
         optionLabel: "name",
         optionValue: "id",
+
+        pagination: {
+            mode: "server"
+        }
     })
     return <Form {...formProps} layout="vertical">
     <Form.Item label="Nombre" required>

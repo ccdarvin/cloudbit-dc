@@ -1,4 +1,4 @@
-import { useForm } from "@pankod/refine-antd"
+import { useForm } from "@refinedev/antd";
 import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { loaderList } from "~/utils"
 import dayjs from "dayjs"

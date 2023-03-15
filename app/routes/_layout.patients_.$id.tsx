@@ -1,13 +1,27 @@
-import { Avatar, Button, Card, Col, Descriptions, Divider, EditButton, Icons, Row, Space, Spin, Tabs, Typography, useForm } from "@pankod/refine-antd"
-import { Link, Outlet, useLoaderData, useParams, useSearchParams } from "@remix-run/react"
-import { json, LoaderFunction } from "@remix-run/node"
-import { loaderOne } from "~/utils"
-import { LayoutWrapper, useOne } from "@pankod/refine-core"
+import { EditButton, useForm } from "@refinedev/antd";
+
+// It is recommended to use explicit import as seen below to reduce bundle size.
+// import { IconName } from "@ant-design/icons";
+import * as Icons from "@ant-design/icons";
+
+import {
+    Avatar,
+    Button,
+    Card,
+    Descriptions,
+    Divider,
+    Space,
+    Spin,
+    Typography,
+} from "antd";
+
+import { Link, Outlet,  useParams, useSearchParams } from "@remix-run/react"
 import dayjs from "dayjs"
 import { useEffect } from "react"
 import { TreatmentIcon } from "~/components/icons"
 import TreatmentTable from "~/components/patients/treatmentsTable"
 import type { TabsProps } from 'antd';
+import { useOne } from "@refinedev/core";
 const RESOURCE = "dc-patients"
 
 
@@ -48,8 +62,7 @@ export default function EditPage() {
     }
 
     const patient = data?.data || {}
-    return <LayoutWrapper>
-        <div style={{
+    return <div style={{
             display: 'flex',
             flexDirection: 'column',
             gap: '1rem',
@@ -134,9 +147,8 @@ export default function EditPage() {
                 ]}
                 cover={ <ContentTab /> }
             />
-        </div>
         <div>
             <Outlet />
         </div>
-    </LayoutWrapper>
+    </div>
 }

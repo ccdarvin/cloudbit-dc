@@ -43,6 +43,7 @@ export async function requireUserId(
   redirectTo: string = new URL(request.url).pathname
 ) {
   try {
+    // @ts-ignore
     const user = await authProvider.checkAuth?.({ request, storage });
     return user;
   } catch (error) {

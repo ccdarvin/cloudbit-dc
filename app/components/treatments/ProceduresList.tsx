@@ -1,4 +1,15 @@
-import { Table, useEditableTable, Space, Button, Icons, Drawer, EditButton, InputNumber, Form, Input, Spin, Icon } from "@pankod/refine-antd"
+import { useEditableTable, EditButton } from "@refinedev/antd";
+
+// It is recommended to use explicit import as seen below to reduce bundle size.
+// import { IconName } from "@ant-design/icons";
+import * as Icons from "@ant-design/icons";
+
+import { Table, Space, Button, Drawer, InputNumber, Form, Input, Spin } from "antd";
+
+// It is recommended to use explicit import as seen below to reduce bundle size.
+// import { IconName } from "@ant-design/icons";
+import Icon from "@ant-design/icons";
+
 import { useSearchParams } from "@remix-run/react"
 import { useEffect, useState } from "react"
 import { useDebounce } from "usehooks-ts"
