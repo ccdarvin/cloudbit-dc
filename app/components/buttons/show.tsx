@@ -4,13 +4,11 @@ import {
   useNavigation,
   useTranslate,
   useResource,
-  useRouterContext,
-  useRouterType,
-  useLink,
 } from "@refinedev/core";
 import { EyeOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import type { ShowButtonProps } from "@refinedev/antd";
+import { Link } from "@remix-run/react";
 
 /**
  * `<ShowButton>` uses Ant Design's {@link https://ant.design/components/button/ `<Button>`} component.
@@ -19,7 +17,7 @@ import type { ShowButtonProps } from "@refinedev/antd";
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/show-button} for more details.
  */
-export const ShowButton: React.FC<ShowButtonProps> = ({
+export const ShowLink: React.FC<ShowButtonProps> = ({
   resource: resourceNameFromProps,
   recordItemId,
   hideText = false,
@@ -32,11 +30,6 @@ export const ShowButton: React.FC<ShowButtonProps> = ({
   const accessControlEnabled = accessControl?.enabled ?? true;
   const hideIfUnauthorized = accessControl?.hideIfUnauthorized ?? false;
   const { showUrl: generateShowUrl } = useNavigation();
-  const routerType = useRouterType();
-  const Link = useLink();
-  const { Link: LegacyLink } = useRouterContext();
-
-  const ActiveLink = routerType === "legacy" ? LegacyLink : Link;
 
   const translate = useTranslate();
 
@@ -72,29 +65,10 @@ export const ShowButton: React.FC<ShowButtonProps> = ({
     return null;
   }
 
-  return (
-    <ActiveLink
-      to={showUrl}
-      replace={false}
-      onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
-        if (data?.can === false) {
-          e.preventDefault();
-          return;
-        }
-        if (onClick) {
-          e.preventDefault();
-          onClick(e);
-        }
-      }}
-    >
-      <Button
-        icon={<EyeOutlined />}
-        disabled={data?.can === false}
-        title={createButtonDisabledTitle()}
-        {...rest}
-      >
-        {!hideText && (children ?? translate("buttons.show", "Show"))}
-      </Button>
-    </ActiveLink>
-  );
-};
+
+  return <Tooltip title={createButtonDisabledTitle()}>
+    {data?.can && <Link to={showUrl}>{children ?? translate("buttons.show", "Show")}</Link>}
+    {!data?.can && (children ?? translate("buttons.show", "Show"))}
+  </Tooltip>
+}
+

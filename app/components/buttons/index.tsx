@@ -4,7 +4,7 @@ import { DropdownActions } from "./DropdownActions"
 import { EditButton } from "./Edit"
 import { DeleteButton } from "./Delete"
 import { CreateButton } from "./Create"
-import { ShowButton } from "./Show"
+import { ShowLink } from "./Show"
 import { RefreshButton } from "./Refresh"
 
 export {
@@ -12,6 +12,6 @@ export {
     EditButton,
     DeleteButton,
     CreateButton,
-    ShowButton,
+    ShowLink,
     RefreshButton,
 }

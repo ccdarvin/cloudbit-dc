@@ -107,9 +107,10 @@ export default function App() {
                   route: "doctors",
                   parent: "settings",
                 },
-                list: () => null,
-                create: () => null,
-                edit: () => null,
+                list: '/doctors',
+                create: '/doctors/create',
+                edit: '/doctors/:id/edit',
+                show: '/doctors/:id',
               },
               {
                 name: "dc-procedures",
