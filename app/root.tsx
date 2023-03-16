@@ -89,9 +89,10 @@ export default function App() {
                   route: "treatments",
                   icon: <TreatmentIcon />,
                 },
-                list: () => null,
-                create: () => null,
-                edit: () => null,
+                list: '/treatments',
+                create: '/treatments/create',
+                edit: '/treatments/:id/edit',
+                show: '/treatments/:id',
               },
               {
                 name: "settings",
