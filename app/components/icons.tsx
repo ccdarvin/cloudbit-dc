@@ -8,7 +8,9 @@ import {
     BsPencilSquare,
     BsGearWide, 
     BsPerson,
-    BsThreeDotsVertical
+    BsThreeDotsVertical,
+    BsSave,
+    BsXSquare
 } from "react-icons/bs"
 
 export const CreateIcon = () => {
@@ -23,8 +25,16 @@ export const ShowIcon = () => {
     return <Icon component={BsEye} />
 }
 
+export const SaveIcon = () => {
+    return <Icon component={BsSave} />
+}
+
 export const DeleteIcon = () => {
     return <Icon component={BsTrash} />
+}
+
+export const CloseIcon = () => {
+    return <Icon component={BsXSquare} />
 }
 
 export const PatientIcon = () => {

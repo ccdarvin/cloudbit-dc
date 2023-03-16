@@ -119,7 +119,7 @@ export default function App() {
                   route: "procedures",
                   parent: "settings",
                 },
-                list: () => null,
+                list: "/procedures",
               }
             ]}
             options={{

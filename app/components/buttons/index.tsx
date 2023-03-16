@@ -6,6 +6,7 @@ import { DeleteButton } from "./Delete"
 import { CreateButton } from "./Create"
 import { ShowLink } from "./Show"
 import { RefreshButton } from "./Refresh"
+import { SaveButton } from "@refinedev/antd"
 
 export {
     DropdownActions,
@@ -14,4 +15,5 @@ export {
     CreateButton,
     ShowLink,
     RefreshButton,
+    SaveButton,
 }
