@@ -1,32 +1,20 @@
 import { List, useTable } from "@refinedev/antd";
-import { Table, Tooltip, Space, Button, Dropdown } from "antd";
-import { json, LoaderFunction } from "@remix-run/node"
-import { Link, Outlet, useLoaderData } from "@remix-run/react"
-import { loaderList } from "~/utils"
+import { Table, Tooltip } from "antd";
+import { Link, Outlet,  useSearchParams } from "@remix-run/react"
 import dayjs from "dayjs"
-import { CreateButton } from "~/components/buttons/create";
-import { RefreshButton } from "~/components/buttons/refresh";
-import { DropdownActions } from "~/components/buttons/dropdownActions";
+import { CreateButton } from "~/components/buttons/Create";
+import { RefreshButton } from "~/components/buttons/Refresh";
+import { DropdownActions } from "~/components/buttons/DropdownActions";
+import { PatientEdit } from "~/components/patients";
 
-const RESOURCE = "dc-patients"
-
-export const loader: LoaderFunction = async ({ request }) => {
-    const data = await loaderList({
-        resource: RESOURCE,
-        request,
-    })
-    return json(data)
-}
 
 export default function Patients() {
-    const { initialData } = useLoaderData()
-    const { tableProps, tableQueryResult } = useTable({
-        resource: RESOURCE,
-
-        queryOptions: {
-            initialData,
-        }
+    const { tableProps } = useTable({
+        syncWithLocation: true,
     })
+
+    const [ searchParams, setSearchParams ] = useSearchParams()
+
     return <div>
         <List
             headerButtons={[
@@ -70,5 +58,9 @@ export default function Patients() {
             />
         </List>
         <Outlet />
+        <PatientEdit 
+            open={searchParams.get('action')==='edit'}
+            redirect="show"
+        />
     </div>
 }

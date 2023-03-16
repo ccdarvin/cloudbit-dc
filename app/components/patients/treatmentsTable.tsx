@@ -7,21 +7,17 @@ import * as Icons from "@ant-design/icons";
 import { Table, Space, Button } from "antd";
 import { Link } from "@remix-run/react"
 
-
-const RESOURCE = "dc-treatments"
-
 export default function TreatmentTable({
     patientId
 }: {
     patientId: string  
 }) {
-    const { tableProps, tableQueryResult } = useTable({
-        resource: RESOURCE,
-
+    const { tableProps } = useTable({
+        resource: "dc-treatments",
         meta: {
             populate: ['doctor', 'patient']
         },
-
+        syncWithLocation: false,
         filters: {
             initial: [
                 {

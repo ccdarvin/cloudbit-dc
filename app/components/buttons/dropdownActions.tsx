@@ -11,8 +11,9 @@ import {
 } from "@refinedev/core"
 import { Button, Dropdown, Space } from "antd"
 import type { EditButtonProps, ShowButtonProps, DeleteButtonProps } from "@refinedev/antd"
-import { DeleteIcon, EditIcon, MoreIcon } from "../icons";
-import { DeleteButton } from "./delete";
+import { DeleteIcon, EditIcon, MoreIcon, ShowIcon } from "../icons";
+import { DeleteButton } from "./Delete";
+import { useSearchParams } from "@remix-run/react";
 
 /**
  * `<EditButton>` uses Ant Design's {@link https://ant.design/components/button/ `<Button>`} component.
@@ -28,7 +29,6 @@ export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteB
   accessControl,
   meta,
   children,
-  onClick,
   ...rest
 }) => {
     const accessControlEnabled = accessControl?.enabled ?? true;
@@ -41,13 +41,14 @@ export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteB
 
     // const ActiveLink = routerType === "legacy" ? LegacyLink : Link;
 
-    const { editUrl: generateEditUrl } = useNavigation();
+    const { editUrl: generateEditUrl, showUrl: generateShowUrl } = useNavigation();
+    const [ searchParams, setSearchParams ] = useSearchParams()
 
     const { id, resource } = useResource(
         resourceNameFromProps 
     );
 
-    const editQuery = useCan({
+    const { data: editData } = useCan({
         resource: resource?.name,
         action: "edit",
         params: { id: recordItemId ?? id, resource },
@@ -55,6 +56,27 @@ export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteB
         enabled: accessControlEnabled,
         },
     });
+    const { data: showData} = useCan({
+        resource: resource?.name,
+        action: "show",
+        params: { id: recordItemId ?? id, resource },
+        queryOptions: {
+          enabled: accessControlEnabled,
+        },
+    });
+    const { data: deleteData } = useCan({
+        resource: resource?.name,
+        action: "delete",
+        params: { id: recordItemId ?? id, resource },
+        queryOptions: {
+          enabled: accessControlEnabled,
+        },
+      });
+
+    const showUrl =
+      resource && (recordItemId || id)
+        ? generateShowUrl(resource, recordItemId! ?? id!, meta)
+        : "";
 
     const createButtonDisabledTitle = (data: any) => {
         if (data?.can) return "";
@@ -66,10 +88,10 @@ export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteB
         );
     };
 
-    const editUrl =
-        resource && (recordItemId ?? id)
-        ? generateEditUrl(resource, recordItemId! ?? id!, meta)
-        : "";
+    //const editUrl =
+    //    resource && (recordItemId ?? id)
+    //    ? generateEditUrl(resource, recordItemId! ?? id!, meta)
+    //    : "";
 
 
     const [confirmDelete, setConfirmDelete] = React.useState(false)
@@ -80,18 +102,30 @@ export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteB
                 items: [
                     {
                         key: "show",
-                        label: "Show",
+                        label: <Link to={showUrl}>
+                            <Space>
+                                <ShowIcon />
+                                {!hideText && translate("buttons.show", "Ver")}
+                            </Space>
+                        </Link>,
+                        title: createButtonDisabledTitle(showData),
+                        disabled: showData?.can === false,
                     },
                     {
                         key: "edit",
-                        label: <Link to={editUrl}>
-                            <Space>
-                                <EditIcon />
-                                {!hideText && translate("buttons.edit", "Editar")}
-                            </Space>
-                        </Link>,
-                        title: createButtonDisabledTitle(editQuery.data),
-                        disabled: editQuery.data?.can === false,
+                        label: <Space>
+                            <EditIcon />
+                            {!hideText && translate("buttons.edit", "Editar")}
+                        </Space>,
+                        title: createButtonDisabledTitle(editData),
+                        disabled: editData?.can === false,
+                        onClick: () => {
+                            searchParams.set("action", "edit")
+                            searchParams.set("id", recordItemId as string)
+                            setSearchParams(
+                                searchParams,
+                            )
+                        }
                     },
                     {
                         key: "delete",
@@ -99,8 +133,8 @@ export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteB
                             <DeleteIcon />
                             {!hideText && translate("buttons.delete", "Eliminar")}
                         </Space>,
-                        title: createButtonDisabledTitle(editQuery.data),
-                        disabled: editQuery.data?.can === false,
+                        title: createButtonDisabledTitle(deleteData),
+                        disabled: deleteData?.can === false,
                         onClick: () => setConfirmDelete(true),
                         danger: true,
                     }

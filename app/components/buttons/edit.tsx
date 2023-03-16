@@ -11,6 +11,7 @@ import {
 import { EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import type { EditButtonProps } from "@refinedev/antd";
+import { Link } from "@remix-run/react";
 
 /**
  * `<EditButton>` uses Ant Design's {@link https://ant.design/components/button/ `<Button>`} component.
@@ -32,12 +33,6 @@ export const EditButton: React.FC<EditButtonProps> = ({
   const accessControlEnabled = accessControl?.enabled ?? true;
   const hideIfUnauthorized = accessControl?.hideIfUnauthorized ?? false;
   const translate = useTranslate();
-
-  const routerType = useRouterType();
-  const Link = useLink();
-  const { Link: LegacyLink } = useRouterContext();
-
-  const ActiveLink = routerType === "legacy" ? LegacyLink : Link;
 
   const { editUrl: generateEditUrl } = useNavigation();
 
@@ -74,20 +69,7 @@ export const EditButton: React.FC<EditButtonProps> = ({
   }
 
   return (
-    <ActiveLink
-      to={editUrl}
-      replace={false}
-      onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
-        if (data?.can === false) {
-          e.preventDefault();
-          return;
-        }
-        if (onClick) {
-          e.preventDefault();
-          onClick(e);
-        }
-      }}
-    >
+    <Link to={editUrl}>
       <Button
         icon={<EditOutlined />}
         disabled={data?.can === false}
@@ -96,6 +78,6 @@ export const EditButton: React.FC<EditButtonProps> = ({
       >
         {!hideText && (children ?? translate("buttons.edit", "Edit"))}
       </Button>
-    </ActiveLink>
+    </Link>
   );
 };

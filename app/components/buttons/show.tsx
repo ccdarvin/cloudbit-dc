@@ -21,7 +21,6 @@ import type { ShowButtonProps } from "@refinedev/antd";
  */
 export const ShowButton: React.FC<ShowButtonProps> = ({
   resource: resourceNameFromProps,
-  resourceNameOrRouteName: propResourceNameOrRouteName,
   recordItemId,
   hideText = false,
   accessControl,
@@ -42,7 +41,7 @@ export const ShowButton: React.FC<ShowButtonProps> = ({
   const translate = useTranslate();
 
   const { id, resource } = useResource(
-    resourceNameFromProps ?? propResourceNameOrRouteName
+    resourceNameFromProps
   );
 
   const { data } = useCan({
