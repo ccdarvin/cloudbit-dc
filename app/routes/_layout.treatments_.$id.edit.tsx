@@ -1,17 +1,10 @@
-import { useForm } from "@refinedev/antd";
-import { useParams } from "@remix-run/react"
+import { useForm } from "@refinedev/antd"
 import CreateDrawer from "~/components/crud/CreateDrawer"
 import TreatmentForm from "~/components/treatments/form"
 
-
-const RESOURCE = "dc-treatments"
-
 export default function Patients() {
-    const { id } = useParams<{ id: string }>()
     const { formProps, saveButtonProps } = useForm({
         action: "edit",
-        resource: RESOURCE,
-        id,
         redirect: "show",
         meta: {
             populate: ['doctor', 'patient']
@@ -21,6 +14,7 @@ export default function Patients() {
     return <div>
         <CreateDrawer
             open={true}
+            size="extraLarge"
             saveButtonProps={saveButtonProps}
         >
             <TreatmentForm formProps={formProps} />

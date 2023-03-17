@@ -1,7 +1,9 @@
 import { List, useTable, } from "@refinedev/antd";
+import { useSearchParams } from "@remix-run/react";
 
 import { Table } from "antd"
 import { DropdownActions, ShowLink } from "~/components/buttons";
+import { TreatmentEdit } from "~/components/treatments";
 
 
 export default function Page() {
@@ -10,6 +12,7 @@ export default function Page() {
             populate: ['doctor', 'patient']
         }
     })
+    const [ searchParams ] = useSearchParams()
     return <List>
         <Table 
             {...tableProps} rowKey="id"
@@ -37,5 +40,6 @@ export default function Page() {
                 }
             ]}
         />
+        <TreatmentEdit resourceItemId={searchParams.get('edit')} open={!!searchParams.get('edit')} redirect="list" />
     </List>
 }

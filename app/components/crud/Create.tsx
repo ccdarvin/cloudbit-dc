@@ -110,13 +110,8 @@ export const Create: React.FC<CreateProps> = ({
             gap: '1rem',
           }}>
             {children}
-            <Card
-              bordered={false}
-              bodyStyle={{
-                display: "none",
-              }}
-              extra={
-                <Space
+            <div>
+              <Space
                 key="action-buttons"
                 style={{ float: "right", marginRight: 24 }}
                 {...(footerButtonProps ?? {})}
@@ -129,8 +124,7 @@ export const Create: React.FC<CreateProps> = ({
                       : footerButtons
                     : defaultFooterButtons}
               </Space>
-              }
-            />
+            </div>
           </div>
           {/*<Card
             bordered={false}

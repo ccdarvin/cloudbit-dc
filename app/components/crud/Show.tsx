@@ -172,9 +172,12 @@ export const Show: React.FC<ShowProps> = ({
         {...(headerProps ?? {})}
       >
         <Spin spinning={isLoading}>
-          <div>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}>
             {children}
-
           </div>
            {/*<Card
              bordered={false}

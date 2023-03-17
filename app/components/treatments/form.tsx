@@ -1,7 +1,11 @@
 
 import { useSelect } from "@refinedev/antd";
-import { Form, Input, Descriptions, Card, Space, Select, Row, Col, DatePicker } from "antd";
+import { useSearchParams } from "@remix-run/react";
+import { Form, Input, Table, Card, Space, Select, Row, Col, DatePicker, InputNumber, Button } from "antd";
 import dayjs from "dayjs";
+import { CreateIcon } from "../icons";
+import ProceduresTable from "./ProceduresList";
+import { useEffect, useState } from "react"
 
 export default function TreatmentForm({ 
     formProps
@@ -20,6 +24,9 @@ export default function TreatmentForm({
             mode: "server"
         }
     })
+
+    const [addProcedureOpen, setAddProcedureOpen] = useState(false)
+    const items = Form.useWatch('items', formProps.form)
 
     return <Form 
         {...formProps} 
@@ -101,6 +108,158 @@ export default function TreatmentForm({
                 </Card>
             </Col>
         </Row>
-        
+        <Form.List
+            name="items"
+        >
+            {(fields, { add, remove }) => <>
+                <ProceduresTable 
+                    open={addProcedureOpen} 
+                    onClose={() => setAddProcedureOpen(false)}
+                    onAdd={(procedure: any) => { 
+                    add({
+                        code: procedure.code,
+                        name: procedure.name,
+                        quantity: 1,
+                        priceBase: procedure.price,
+                        price: procedure.price,
+                        discount: 0,
+                        total: procedure.price,
+                        procedure: procedure.id,
+                    })
+                }} />
+                <Card
+                    bodyStyle={{ display: 'none'}}
+                    cover={ <>
+                        <Table
+                            size="small"
+                            dataSource={items?.map((item: any, index: number) => ({key: index, ...item}) )}
+                            pagination={false}
+                            summary={() => {
+                                const total = items?.reduce((acc: number, item: any) => acc + item.total, 0)
+                                return <Table.Summary.Row>
+                                    <Table.Summary.Cell index={0} colSpan={3} />
+                                    <Table.Summary.Cell index={1}>Total</Table.Summary.Cell>
+                                    <Table.Summary.Cell index={2}>
+                                        {total}
+                                    </Table.Summary.Cell>
+                                </Table.Summary.Row>
+                            }}
+                            columns={[
+                                {
+                                    title: 'Código',
+                                    dataIndex: 'code',
+                                    rowScope: 'row',
+                                    fixed: 'left',
+                                },
+                                {
+                                    title: 'Nombre',
+                                    dataIndex: 'name',
+                                    render: (_, record: any, index: number) => <Form.Item
+                                        noStyle
+                                        name={[index, 'name']}
+                                    >
+                                        <Input.TextArea autoSize />
+                                    </Form.Item>,
+                                },
+                                {
+                                    title: 'Cantidad',
+                                    dataIndex: 'quantity',
+                                    render: (_, record: any, index: number) => <Form.Item
+                                        noStyle
+                                        name={[index, 'quantity']}
+                                    >
+                                        <InputNumber 
+                                            placeholder="0"
+                                            onChange={(value) => {
+                                                formProps.form?.setFieldValue(['items', index, 'total'], value as number * record.price)
+                                            }}
+                                        />
+                                    </Form.Item>
+                                },
+                                {
+                                    title: 'Precio / Descuento / Precio final',
+                                    dataIndex: 'price',
+                                    render: (_, record: any, index: number) => <Space.Compact>
+                                        <Form.Item noStyle name={[index, 'priceBase']}>
+                                            <InputNumber
+                                                prefix="$" 
+                                                placeholder="0.00"
+                                                precision={2}
+                                                onChange={(value) => {
+                                                    //  cal price with two decimals
+                                                    const price = Math.round((value as number * record.quantity) * 100) / 100
+                                                    formProps.form?.setFieldValue(['items', index, 'price'], price)
+                                                    // set total
+                                                    const quantity = formProps.form?.getFieldValue(['items', index, 'quantity'])
+                                                    formProps.form?.setFieldValue(['items', index, 'total'], quantity as number * price)
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        <Form.Item noStyle name={[index, 'discount']}>
+                                            <InputNumber 
+                                                prefix="%"
+                                                placeholder="0.00"
+                                                style={{ 
+                                                    borderRadius: 0,
+                                                    marginLeft: -3.5,
+                                                }}
+                                                onChange={(value) => {
+                                                    // cal price with two decimals
+                                                    const price = Math.round((record.priceBase * record.quantity * (100 - (value as number)) / 100) * 100) / 100
+                                                    formProps.form?.setFieldValue(['items', index, 'price'], price)
+                                                    // set total
+                                                    const quantity = formProps.form?.getFieldValue(['items', index, 'quantity'])
+                                                    formProps.form?.setFieldValue(['items', index, 'total'], quantity as number * price)
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        <Form.Item noStyle name={[index, 'price']}>
+                                            <InputNumber 
+                                                prefix="$"
+                                                placeholder="0.00"
+                                                style={{
+                                                    borderTopLeftRadius: 0,
+                                                    borderBottomLeftRadius: 0,
+                                                }}
+                                                onChange={(value: any) => {
+                                                    // cal discount with two decimals
+                                                    const discount = Math.round((100 - (value as number * 100 / record.priceBase)) * 100) / 100
+                                                    formProps.form?.setFieldValue(['items', index, 'discount'], discount)
+                                                    // set total
+                                                    const quantity = formProps.form?.getFieldValue(['items', index, 'quantity'])
+                                                    formProps.form?.setFieldValue(['items', index, 'total'], quantity as number * value as number)
+                                                }}
+                                            />
+                                        </Form.Item>
+                                    </Space.Compact>
+                                },
+                                {
+                                    title: 'Total',
+                                    dataIndex: 'total',
+                                    render: (_, record: any, index: number) => <Form.Item
+                                        noStyle
+                                        name={[index, 'total']}
+                                    >
+                                        <InputNumber
+                                            disabled
+                                            prefix="$"
+                                            placeholder="0.00"
+                                        />
+                                    </Form.Item>,
+                                    fixed: 'right',
+                                },
+                            ]}
+                            footer={() => <Button key="1" 
+                                type="dashed" 
+                                block 
+                                icon={<CreateIcon />} onClick={() => setAddProcedureOpen(true)}
+                            >
+                                Agregar procedimiento
+                            </Button>}
+                        />
+                    </>}
+                />
+            </>}
+        </Form.List>
     </Form>
 }

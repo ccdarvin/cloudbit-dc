@@ -22,10 +22,16 @@ import { useSearchParams } from "@remix-run/react";
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/edit-button} for more details.
  */
-export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteButtonProps> = ({
+
+type DropdownActionsProps = {
+    isEditPage?: boolean
+}
+
+export const DropdownActions: React.FC<EditButtonProps & ShowButtonProps & DeleteButtonProps & DropdownActionsProps > = ({
   resource: resourceNameFromProps,
   recordItemId,
   hideText = false,
+  isEditPage = false,
   accessControl,
   meta,
   children,
@@ -88,11 +94,15 @@ export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteB
         );
     };
 
-    //const editUrl =
-    //    resource && (recordItemId ?? id)
-    //    ? generateEditUrl(resource, recordItemId! ?? id!, meta)
-    //    : "";
+    let editUrl =
+        resource && (recordItemId ?? id)
+        ? generateEditUrl(resource, recordItemId! ?? id!, meta)
+        : ""
 
+    if (!isEditPage) {
+        searchParams.set("edit", recordItemId as string)
+        editUrl = window.location.pathname + "?" + searchParams.toString()
+    }   
 
     const [confirmDelete, setConfirmDelete] = React.useState(false)
 
@@ -113,19 +123,14 @@ export const DropdownActions: React.FC<EditButtonProps| ShowButtonProps |DeleteB
                     },
                     {
                         key: "edit",
-                        label: <Space>
-                            <EditIcon />
-                            {!hideText && translate("buttons.edit", "Editar")}
-                        </Space>,
+                        label: <Link to={editUrl}>
+                            <Space>
+                                <EditIcon />
+                                {!hideText && translate("buttons.edit", "Editar")}
+                            </Space>
+                        </Link>,
                         title: createButtonDisabledTitle(editData),
                         disabled: editData?.can === false,
-                        onClick: () => {
-                            searchParams.set("action", "edit")
-                            searchParams.set("id", recordItemId as string)
-                            setSearchParams(
-                                searchParams,
-                            )
-                        }
                     },
                     {
                         key: "delete",

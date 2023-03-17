@@ -1,15 +1,6 @@
-import { useEditableTable, EditButton } from "@refinedev/antd";
-
-// It is recommended to use explicit import as seen below to reduce bundle size.
-// import { IconName } from "@ant-design/icons";
+import { useTable } from "@refinedev/antd";
 import * as Icons from "@ant-design/icons";
-
-import { Table, Space, Button, Drawer, InputNumber, Form, Input, Spin } from "antd";
-
-// It is recommended to use explicit import as seen below to reduce bundle size.
-// import { IconName } from "@ant-design/icons";
-import Icon from "@ant-design/icons";
-
+import { Table, Button, Drawer, Input, Spin } from "antd";
 import { useSearchParams } from "@remix-run/react"
 import { useEffect, useState } from "react"
 import { useDebounce } from "usehooks-ts"
@@ -19,30 +10,25 @@ const RESOURCE = "dc-procedures"
 
 export default function ProceduresTable({
     onAdd,
+    open,
+    onClose
 }: {
-    onAdd: (procedure: any) => void
+    onAdd: (procedure: any) => void,
+    open: boolean,
+    onClose: () => void
 }) {
-    const [open, setOpen] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState<string>("")
     const debouncedQuery = useDebounce<string>(query, 200)
 
     const {
         tableProps,
-        formProps,
         tableQueryResult,
         setFilters: setTableFilters,
-        isEditing,
-        setId: setEditId,
-        saveButtonProps,
-        cancelButtonProps,
-        editButtonProps
-    } = useEditableTable({
+    } = useTable({
         resource: RESOURCE,
+        syncWithLocation: false
     })
-    useEffect (() => {
-        setOpen(true)
-    }, [open])
     useEffect(() => {
         setTableFilters([
             {
@@ -62,7 +48,7 @@ export default function ProceduresTable({
             }
         ])
     }, [debouncedQuery])
-    tableProps.loading = tableQueryResult?.isLoading
+    
     return <Drawer 
         open={open}
         size="large"
@@ -82,83 +68,43 @@ export default function ProceduresTable({
         }
         mask={false}
         onClose={() => {
-            searchParams.delete('action')
-            setSearchParams(searchParams)
+            onClose()
         }}
     >
-        <Form {...formProps}>
-            <Table 
-                {...tableProps} rowKey="id"
-                columns={[
-                    {
-                        render: (_, record: any) => {
-                            return <Button
-                                icon={<Icons.PlusOutlined />}
-                                type="text"
-                                onClick={() => {
-                                    onAdd(record)
-                                }}
-                            >
-                                Agregar
-                            </Button>
-                        }
-                    },
-                    {
-                        title: "Código",
-                        dataIndex: "code",
-                    },
-                    {
-                        title: "Nombre",
-                        dataIndex: "name",
-                    },
-                    {
-                        title: "Categoría",
-                        dataIndex: "category",
-                    },
-                    {
-                        title: "Precio",
-                        dataIndex: "price",
-                        render: (_, record: any) => {
-                            if (isEditing(record.id)) {
-                                return  <Form.Item 
-                                    name="price"
-                                    noStyle
-                                >
-                                        <InputNumber prefix="$" />
-                                </Form.Item>
-                            }
-                            return record.price
-                        }
-                    },
-                    {
-                        dataIndex: "actions",
-                        render: (_, record: any) => {
-                            if (isEditing(record.id)) {
-                                return <Space.Compact>
-                                    <Button
-                                        icon={<Icons.SaveOutlined />}
-                                        type="text"
-                                        loading={saveButtonProps.disabled}
-                                        {...saveButtonProps} />
-                                    <Button
-                                        danger
-                                        type="text"
-                                        icon={<Icons.CloseOutlined />}
-                                        {...cancelButtonProps} />
-                                </Space.Compact>
-                            }
-                            return <Space.Compact>
-                                <EditButton
-                                    {...editButtonProps(record.id)}
-                                    hideText
-                                    size="small"
-                                    type="text"
-                                />
-                            </Space.Compact>
-                        }
+        <Table 
+            {...tableProps} rowKey="id"
+            columns={[
+                {
+                    render: (_, record: any) => {
+                        return <Button
+                            icon={<Icons.PlusOutlined />}
+                            type="text"
+                            onClick={() => {
+                                onAdd(record)
+                            }}
+                        >
+                            Agregar
+                        </Button>
                     }
-                ]}
-            />
-        </Form>
+                },
+                {
+                    title: "Código",
+                    dataIndex: "code",
+                },
+                {
+                    title: "Nombre",
+                    dataIndex: "name",
+                },
+                {
+                    title: "Categoría",
+                    dataIndex: "category",
+                },
+                {
+                    title: "Precio",
+                    dataIndex: "price",
+                    render: (_, record: any) => `$ ${record.price}`
+                },
+            ]}
+        />
     </Drawer>
 }

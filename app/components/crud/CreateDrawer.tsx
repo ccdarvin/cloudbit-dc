@@ -17,7 +17,7 @@ export default function CreateDrawer ({
     open: boolean
     back?: boolean
     title?: string
-    size?: "default" | "large" 
+    size?: "default" | "large" | "extraLarge" | "full"
     onClose?: () => void,
     saveButtonProps?: any
 }) {
@@ -27,10 +27,13 @@ export default function CreateDrawer ({
     }, [open])
     const navigate = useNavigate()
 
+    const maxWidth = size === "default" ? '40rem' : size === "large" ? '60rem' : size === "extraLarge" ? '80rem' : '100%'
+
     return <Drawer
         title={title}
         placement="right"
-        size={size}
+        width={'100%'}
+        contentWrapperStyle={{ maxWidth }}
         mask={false}
         open={_open}
         onClose={() => {
