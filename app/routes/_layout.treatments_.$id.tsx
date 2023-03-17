@@ -1,17 +1,18 @@
 import { useForm } from "@refinedev/antd";
 import * as Icons from "@ant-design/icons";
 
-import { Button, Card, Descriptions, Space, Form, Table, Input } from "antd";
-import { Link } from "@remix-run/react"
+import { Card, Descriptions, Table, Typography } from "antd";
+import { Link, Outlet } from "@remix-run/react"
 import { Show } from "~/components/crud/Show";
 import { useShow } from "@refinedev/core"
+import ItemsTable from "~/components/treatments/ItemsTable";
 
 
 export default function EditPage() {
     
     const { queryResult } = useShow({
         meta: {
-            populate: ['doctor', 'patient']
+            populate: ['doctor', 'patient', 'items']
         }
     });
 
@@ -28,49 +29,33 @@ export default function EditPage() {
                 <Descriptions.Item label="Paciente">{treatment?.patient?.firstName} {treatment?.patient?.lastName}</Descriptions.Item>
             </Descriptions>
         </Card>
-        <Card
-            bodyStyle={{ display: 'none'}}
-            cover={
-                <Table
-                    size="small"
-                    dataSource={treatment?.items?.map((item: any, index: number) => ({key: index, ...item}) )}
-                    pagination={false}
-                    summary={() => {
-                        const total = treatment?.items?.reduce((acc: number, item: any) => acc + item.total, 0)
-                        return <Table.Summary.Row>
-                            <Table.Summary.Cell index={0} colSpan={3} />
-                            <Table.Summary.Cell index={1}>Total</Table.Summary.Cell>
-                            <Table.Summary.Cell index={2}>
-                                {total}
-                            </Table.Summary.Cell>
-                        </Table.Summary.Row>
-                    }}
-                    columns={[
-                        {
-                            title: 'Código',
-                            dataIndex: 'code',
-                            rowScope: 'row',
-                            fixed: 'left',
-                        },
-                        {
-                            title: 'Nombre',
-                            dataIndex: 'name',
-                        },
-                        {
-                            title: 'Cantidad',
-                            dataIndex: 'quantity',
-                        },
-                        {
-                            title: 'Precio / Descuento / Precio final',
-                            dataIndex: 'price',
-                        },
-                        {
-                            title: 'Total',
-                            dataIndex: 'total'
-                        },
-                    ]}
-                />
-            }
+        <ItemsTable
+            dataSource={treatment?.items}
+            columns={[
+                {
+                    title: 'Código',
+                    dataIndex: 'code',
+                    rowScope: 'row',
+                    fixed: 'left',
+                },
+                {
+                    title: 'Nombre',
+                    dataIndex: 'name',
+                },
+                {
+                    title: 'Cantidad',
+                    dataIndex: 'quantity',
+                },
+                {
+                    title: 'Precio / Descuento / Precio final',
+                    dataIndex: 'price',
+                },
+                {
+                    title: 'Total',
+                    dataIndex: 'total'
+                },
+            ]}
         />
+        <Outlet />
     </Show>
 }

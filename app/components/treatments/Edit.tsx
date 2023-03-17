@@ -21,7 +21,7 @@ export default function TreatmentEdit({
         id: resourceItemId as string,
         redirect: redirect,
         meta: {
-            populate: ['doctor', 'patient']
+            populate: ['doctor', 'patient', 'items']
         }
     })
 
