@@ -44,7 +44,7 @@ export const Show: React.FC<ShowProps> = ({
   footerButtons,
   footerButtonProps,
   headerButtonProps,
-  goBack: goBackFromProps,
+  goBack: goBackFromProps = false,
 }) => {
   const translate = useTranslate();
   const { options: { breadcrumb: globalBreadcrumb } = {} } = useRefineContext();

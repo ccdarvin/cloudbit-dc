@@ -12,7 +12,7 @@
   "dependencies": {
     "@refinedev/antd": "^5.1.2",
     "@refinedev/cli": "^2.1.0",
-    "@refinedev/core": "^4.1.4",
+    "@refinedev/core": "^4.3.0",
     "@refinedev/inferencer": "^3.1.2",
     "@refinedev/kbar": "^1.1.0",
     "@refinedev/remix-router": "^2.1.0",

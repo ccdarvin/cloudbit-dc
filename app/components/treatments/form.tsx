@@ -1,14 +1,14 @@
 
-import { useSelect } from "@refinedev/antd";
-import { useSearchParams } from "@remix-run/react";
-import { Form, Input, Table, Card, Space, Select, Row, Col, DatePicker, InputNumber, Button, Typography } from "antd";
-import dayjs from "dayjs";
-import { CreateIcon } from "../icons";
-import ProceduresTable from "./ProceduresList";
-import { useEffect, useState } from "react"
-import ItemsTable from "./ItemsTable";
-import StatusSelect from "./StatusSelect";
-import HeaderStatusField from "./HeaderStatusField";
+import { Form, Input, Card, Space, Select, Row, Col, DatePicker, InputNumber, Button } from "antd"
+import HeaderStatusControl from "./controls/HeaderStatusControl"
+import ProceduresTable from "./ProceduresList"
+import { useSelect } from "@refinedev/antd"
+import { CreateIcon } from "../icons"
+import ItemsTable from "./ItemsTable"
+import { useState } from "react"
+import dayjs from "dayjs"
+import StatusSelectControl from "./controls/StatusSelectControl"
+
 
 export default function TreatmentForm({ 
     formProps
@@ -30,7 +30,7 @@ export default function TreatmentForm({
 
     const [addProcedureOpen, setAddProcedureOpen] = useState(false)
     const items = Form.useWatch('items', formProps.form)
-
+    console.log(items)
     return <Form 
         {...formProps} 
         layout="vertical"
@@ -89,14 +89,17 @@ export default function TreatmentForm({
                 <Card
                     bordered={false}
                 >   
-                    <Form.Item label="Estado">
-                        <HeaderStatusField items={items} />
+                    <Form.Item label="Estado" name={['status']}>
+                        <HeaderStatusControl items={items} />
                     </Form.Item>
                     <Space.Compact block>
                         <Form.Item 
                             label="Fecha de inicio" 
                             name={['startDate']}
                             style={{ flex: '-0 1 50%' }}
+                            getValueProps={(value) => ({
+                                value: value ? dayjs(value) : undefined
+                            })}
                         >
                             <DatePicker />
                         </Form.Item>
@@ -104,6 +107,9 @@ export default function TreatmentForm({
                             label="Fecha de finalización" 
                             name={['endDate']}
                             style={{ flex: '-0 1 50%' }}
+                            getValueProps={(value) => ({
+                                value: value ? dayjs(value) : undefined
+                            })}
                         >
                             <DatePicker />
                         </Form.Item>
@@ -156,7 +162,7 @@ export default function TreatmentForm({
                                 noStyle
                                 name={[index, 'status']}
                             >
-                                <StatusSelect  />
+                                <StatusSelectControl  />
                             </Form.Item>,
                         },
                         {

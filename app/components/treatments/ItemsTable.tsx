@@ -6,14 +6,16 @@ import type { TableProps } from "antd"
 export default function ItemsTable ({
     dataSource,
     columns,
-    footer
+    footer,
+    size = 'small',
 }: {
     dataSource?: TableProps<any>['dataSource'],
     columns?: TableProps<any>['columns'],
-    footer?: TableProps<any>['footer']
+    footer?: TableProps<any>['footer'],
+    size?: TableProps<any>['size'],
 }) {
     return <Table
-        size="small"
+        size={size}
         dataSource={dataSource?.map((item: any, index: number) => ({key: index, ...item}) )}
         pagination={false}
         summary={(currentData) => {
