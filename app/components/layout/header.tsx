@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useGetIdentity, useActiveAuthProvider } from "@refinedev/core";
-import { Layout as AntdLayout, Typography, Avatar, Space } from "antd";
+import { Layout as AntdLayout, Typography, Avatar, Space, Dropdown, Switch } from "antd";
 import type { RefineLayoutHeaderProps } from "@refinedev/antd";
-import { UserIcon } from "../icons";
+import { DarkIcon, LightIcon, UserIcon } from "../icons";
+import { ColorModeContext } from "~/contexts";
 
-const { Text } = Typography;
 
 export const Header: React.FC<RefineLayoutHeaderProps> = () => {
   const authProvider = useActiveAuthProvider();
@@ -19,6 +19,8 @@ export const Header: React.FC<RefineLayoutHeaderProps> = () => {
     return <Avatar size="default" icon={<UserIcon />} />;
   }
 
+  const { mode, setMode } = useContext(ColorModeContext)
+
   return <AntdLayout.Header
       style={{
         display: "flex",
@@ -30,10 +32,16 @@ export const Header: React.FC<RefineLayoutHeaderProps> = () => {
       }}
     >
       <Space>
+        <Switch
+          checkedChildren={<DarkIcon />}
+          unCheckedChildren={<LightIcon />}
+          onChange={() => setMode(mode === "light" ? "dark" : "light")}
+          defaultChecked={mode === "dark"}
+        />
         {user && (
-          <Text ellipsis strong>
+          <Typography.Text ellipsis strong>
             {user?.name}
-          </Text>
+          </Typography.Text>
         )}
         {user && (
           <AvatarUser />

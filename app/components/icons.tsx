@@ -10,7 +10,15 @@ import {
     BsPerson,
     BsThreeDotsVertical,
     BsSave,
-    BsXSquare
+    BsXSquare,
+    BsCCircle,
+    BsChevronRight,
+    BsChevronLeft,
+    BsCircle,
+    BsSunFill,
+    BsMoon,
+    BsFillMoonStarsFill,
+    BsSun
 } from "react-icons/bs"
 
 export const CreateIcon = () => {
@@ -56,3 +64,33 @@ export const UserIcon = () => {
 export const MoreIcon = () => {
     return <Icon component={BsThreeDotsVertical} />
 }
+
+
+/***************************
+ * CALENDAR ICONS
+ ***************************/
+
+export const PrevIcon = () => {
+    return <Icon component={BsChevronLeft} />
+}
+
+export const NextIcon = () => {
+    return <Icon component={BsChevronRight} />
+}
+
+export const TodayIcon = () => {
+    return <Icon component={BsCircle} />
+}
+
+/***********************************
+ *  MODE SWITCHER ICONS
+ */
+
+export const LightIcon = () => {
+    return <Icon component={BsFillMoonStarsFill} />
+}
+
+export const DarkIcon = () => {
+    return <Icon component={BsSun} />
+}
+
