@@ -2,40 +2,32 @@
 import { Calendar } from 'react-big-calendar'
 import { dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
-import timezone from 'dayjs/plugin/timezone'
-import { useMemo } from 'react'
-import Toolbar from '~/components/calendar/Toolbar'
+import { useMemo, useState } from 'react'
 import type { Components } from 'react-big-calendar'
 import calendarStyle from '~/styles/calendar.css'
-import { Typography } from 'antd'
+import CalendarComponents from '~/components/calendar/CalendarComponents'
 
-
-
-dayjs.extend(timezone)
-
-dayjs.extend(timezone)
 const localizer = dayjsLocalizer(dayjs)
 
 export default function CaalendarPAge() {
 
+
     const { components }: {
         components: Components
     } = useMemo(() => ({
-        components: {
-            toolbar: Toolbar,
-            month: {
-                dateHeader: ({ label }) => <Typography.Text>{label}</Typography.Text>,
-            },
-        }
+        components: CalendarComponents
     }), [])
+
 
     return <div>
         <Calendar
             components={components}
             localizer={localizer}
-            startAccessor="start"
-      endAccessor="end"
-      style={{ height: 500 }}
+            style={{ height: "calc(100vh - 128px)" }}
+            onSelectSlot={(slotInfo) => {
+                console.log(slotInfo)
+            }}
+            selectable
         />
     </div>
 }

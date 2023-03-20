@@ -10,18 +10,24 @@ import {
 } from "@remix-run/react";
 import { Refine } from "@refinedev/core";
 import { AuthPage, notificationProvider } from "@refinedev/antd";
+import { PatientIcon, SettingsIcon, TreatmentIcon } from "./components/icons"
 
-import routerProvider, {
-  UnsavedChangesNotifier,
-} from "@refinedev/remix-router";
+import routerProvider, { UnsavedChangesNotifier } from "@refinedev/remix-router";
 import { DataProvider } from "@refinedev/strapi-v4";
 import resetStyle from "@refinedev/antd/dist/reset.css";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import { authProvider, axiosInstance } from "~/authProvider";
 import { API_URL, TOKEN_KEY } from "~/constants";
 import { ColorModeContextProvider } from "@contexts";
-import * as cookie from "cookie";
-import { PatientIcon, SettingsIcon, TreatmentIcon } from "./components/icons";
+import * as cookie from "cookie"
+import localizedFormat from "dayjs/plugin/localizedFormat"
+import timezone from 'dayjs/plugin/timezone'
+import "dayjs/locale/es"
+import dayjs from "dayjs"
+
+dayjs.extend(localizedFormat)
+dayjs.extend(timezone)
+dayjs.locale('es')
 
 export const meta: V2_MetaFunction = () => [
   {
@@ -40,15 +46,15 @@ export const meta: V2_MetaFunction = () => [
 export const loader = async ({ request }: LoaderArgs) => {
   const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "");
   const token = parsedCookie[TOKEN_KEY];
-  const theme = parsedCookie["theme"];
+  const mode = parsedCookie["theme"];
   return json({
     token,
-    theme,
+    mode,
   });
 };
 
 export default function App() {
-  const { token, theme } = useLoaderData();
+  const { token, mode } = useLoaderData();
   if (token) {
     axiosInstance.defaults.headers.common = {
       Authorization: `Bearer ${token}`,
@@ -63,7 +69,7 @@ export default function App() {
       </head>
       <body>
         <RefineKbarProvider>
-          <ColorModeContextProvider>
+          <ColorModeContextProvider defaultMode={mode}>
             <RefineKbarProvider>
               <Refine
                 routerProvider={routerProvider}

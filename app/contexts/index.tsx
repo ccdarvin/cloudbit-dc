@@ -1,13 +1,11 @@
 import React, {
-  PropsWithChildren,
   createContext,
   useEffect,
   useState,
 } from "react";
 import { ConfigProvider, theme } from "antd";
 import { parseCookies, setCookie } from "nookies";
-import { geekblue as color } from '@ant-design/colors';
-
+import { generate } from '@ant-design/colors';
 
 type ColorModeContextType = {
   mode: string;
@@ -18,11 +16,18 @@ export const ColorModeContext = createContext<ColorModeContextType>(
   {} as ColorModeContextType
 );
 
-export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
+export function ColorModeContextProvider ({
   children,
-}) => {
+  defaultMode="light",
+}: {
+  children: React.ReactNode;
+  defaultMode: string;
+}) {
   const [isMounted, setIsMounted] = useState(false);
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState(defaultMode);
+  const [color, setColor] = useState(generate('#1890ff', {
+    theme: defaultMode === "light" ? 'default' : 'dark',
+  }));
 
   useEffect(() => {
     setIsMounted(true);
@@ -34,13 +39,21 @@ export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
     }
   }, [isMounted]);
 
+  useEffect(() => {
+    setColor(generate('#1890ff', {
+      theme: mode === "light" ? 'default' : 'dark',
+    }));
+  }, [mode]);
+
   const setColorMode = () => {
-    if (mode === "light") {
-      setMode("dark");
-    } else {
-      setMode("light");
-    }
-  };
+    const newMode = mode === "light" ? "dark" : "light";
+    // save in cookies including expiration date and all subdomains
+    setCookie(null, "theme", newMode, {
+      maxAge: 30 * 24 * 60 * 60,
+      path: "/",
+    });
+    setMode(newMode);
+  }
 
   const { darkAlgorithm, defaultAlgorithm } = theme;
 
@@ -59,8 +72,10 @@ export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
           },
           components: {
             Layout: {
-              colorBgHeader: mode === "light" ? "#fff" : '#141414',
-              colorBgLayout: mode === "light" ? "#fff" : '#001529',
+              colorBgHeader: mode === "light" ? '#fff' : color[0],
+            },
+            Menu: {
+              colorBgMask: color[0],
             }
           }
         }}

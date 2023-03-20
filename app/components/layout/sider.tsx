@@ -178,6 +178,9 @@ export const Sider: React.FC<RefineLayoutSiderProps> = ({
           selectedKeys={selectedKey ? [selectedKey] : []}
           defaultOpenKeys={defaultOpenKeys}
           mode="inline"
+          style={{
+            backgroundColor: "transparent",
+          }}
           onClick={() => {
             setDrawerOpen(false);
             if (!breakpoint.lg) {
@@ -234,6 +237,9 @@ export const Sider: React.FC<RefineLayoutSiderProps> = ({
         onCollapse={(collapsed: boolean): void => setCollapsed(collapsed)}
         collapsedWidth={80}
         breakpoint="lg"
+        style={{
+          //backgroundColor: "transparent",
+        }}
       >
         <RenderToTitle collapsed={collapsed} />
         {renderMenu()}
