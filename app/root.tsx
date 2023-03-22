@@ -10,7 +10,7 @@ import {
 } from "@remix-run/react";
 import { Refine } from "@refinedev/core";
 import { AuthPage, notificationProvider } from "@refinedev/antd";
-import { PatientIcon, SettingsIcon, TreatmentIcon } from "./components/icons"
+import { CalendarIcon, PatientIcon, SettingsIcon, TreatmentIcon } from "./components/icons"
 
 import routerProvider, { UnsavedChangesNotifier } from "@refinedev/remix-router";
 import { DataProvider } from "@refinedev/strapi-v4";
@@ -28,6 +28,7 @@ import dayjs from "dayjs"
 dayjs.extend(localizedFormat)
 dayjs.extend(timezone)
 dayjs.locale('es')
+
 
 export const meta: V2_MetaFunction = () => [
   {
@@ -79,12 +80,14 @@ export default function App() {
                 notificationProvider={notificationProvider}
                 resources={[
                   {
-                    name: "events",
+                    name: "dc-events",
                     list: "/calendar",
+                    create: "/calendar/create",
+                    edit: "/calendar/:id/edit",
                     meta: {
                       label: "Calendario",
                       route: "calendar",
-                      icon: <TreatmentIcon />,
+                      icon: <CalendarIcon />,
                     },
                   },
                   {

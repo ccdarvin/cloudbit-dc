@@ -6,6 +6,7 @@ import React, {
 import { ConfigProvider, theme } from "antd";
 import { parseCookies, setCookie } from "nookies";
 import { generate } from '@ant-design/colors';
+import esES from 'antd/locale/es_ES'
 
 type ColorModeContextType = {
   mode: string;
@@ -76,8 +77,11 @@ export function ColorModeContextProvider ({
             },
             Menu: {
               colorBgMask: color[0],
-            }
+            },
           }
+        }}
+        locale={{ 
+          ...esES
         }}
       >
         {children}

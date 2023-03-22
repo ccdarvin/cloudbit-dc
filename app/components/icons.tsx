@@ -11,12 +11,10 @@ import {
     BsThreeDotsVertical,
     BsSave,
     BsXSquare,
-    BsCCircle,
     BsChevronRight,
     BsChevronLeft,
     BsCircle,
-    BsSunFill,
-    BsMoon,
+    BsCalendar3,
     BsFillMoonStarsFill,
     BsSun
 } from "react-icons/bs"
@@ -43,6 +41,11 @@ export const DeleteIcon = () => {
 
 export const CloseIcon = () => {
     return <Icon component={BsXSquare} />
+}
+
+
+export const CalendarIcon = () => {
+    return <Icon component={BsCalendar3} />
 }
 
 export const PatientIcon = () => {

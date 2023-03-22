@@ -36,11 +36,12 @@ export default function CreateDrawer ({
         contentWrapperStyle={{ maxWidth }}
         mask={false}
         open={_open}
+        destroyOnClose
         onClose={() => {
+            onClose?.()
             if (back) {
                 navigate(-1)
             }
-            onClose?.()
         }}
         footer={<Space>
             <SaveButton

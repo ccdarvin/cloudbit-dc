@@ -1,11 +1,10 @@
 import { Button, Col, Row, Segmented, Space, Tooltip, Typography } from 'antd'
-import type { Components } from 'react-big-calendar'
 import dayjs from 'dayjs'
 import { NextIcon, PrevIcon, TodayIcon } from '../icons'
 import { Navigate } from "react-big-calendar"
 
-export const CalendarComponents: Components = {
-    toolbar({ label, localizer, onNavigate, onView, view, views }){
+export const CalendarComponents = {
+    toolbar({ label, localizer, onNavigate, onView, view, views }: any){
         const { messages } = localizer
         return <Row justify="space-between" align="middle" style={{paddingBottom: '1rem'}}>
             <Col>
@@ -32,15 +31,15 @@ export const CalendarComponents: Components = {
         </Row>
     },
     month: {
-        header ({ label, date }) {
+        header ({ label, date }: any) {
             return <Tooltip title={dayjs(date).format('dddd')}>
                 <Typography.Title level={5}>{label}</Typography.Title>
             </Tooltip>
         },
-        dateHeader ({ label, date, ...props }) {
+        dateHeader ({ label, date, onDrillDown }: any) {
             return <Tooltip title={dayjs(date).format('dddd, LL')}>
                 <Button type='text'
-                    onClick={props.onDrillDown}
+                    onClick={onDrillDown}
                 >
                     {label}
                 </Button>
