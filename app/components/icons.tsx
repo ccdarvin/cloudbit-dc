@@ -16,7 +16,9 @@ import {
     BsCircle,
     BsCalendar3,
     BsFillMoonStarsFill,
-    BsSun
+    BsSun,
+    BsArrowCounterclockwise,
+    BsArrowClockwise
 } from "react-icons/bs"
 
 export const CreateIcon = () => {
@@ -97,3 +99,15 @@ export const DarkIcon = () => {
     return <Icon component={BsSun} />
 }
 
+
+/************************************
+ * editor icons
+ */
+
+export const UndoIcon = () => {
+    return <Icon component={BsArrowCounterclockwise} />
+}
+
+export const RedoIcon = () => {
+    return <Icon component={BsArrowClockwise} />
+}
