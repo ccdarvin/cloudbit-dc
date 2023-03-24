@@ -18,9 +18,27 @@ import { TRANSFORMERS } from "@lexical/markdown";
 
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
 import AutoLinkPlugin from "./plugins/AutoLinkPlugin";
+import { Typography } from "antd";
 
-function Placeholder() {
-  return <div className="editor-placeholder">Enter some rich text...</div>;
+function Placeholder({
+  children,
+}: {
+  children?: React.ReactNode;
+}) {
+  return <Typography.Text 
+    type="secondary"
+    style={{
+      position: "absolute",
+      top: 0,
+      padding: "0.5rem",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      userSelect: "none",
+      pointerEvents: "none",
+    }}
+  >
+    {children||"Start typing here..."}
+  </Typography.Text>
 }
 
 const editorConfig: any = {
@@ -55,11 +73,20 @@ export default function RichEditor({
 }) {
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="editor-container">
+      <div>
         <ToolbarPlugin />
-        <div className="editor-inner">
+        <div style={{
+          position: "relative",
+        }}>
           <RichTextPlugin
-            contentEditable={<ContentEditable className="editor-input" />}
+            contentEditable={<ContentEditable style={{
+              padding: "0.5rem",
+              userSelect: "text",
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+              outline: 0,
+              tabSize:1
+            }} />}
             placeholder={<Placeholder />}
             ErrorBoundary={LexicalErrorBoundary}
           />

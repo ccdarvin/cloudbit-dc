@@ -18,7 +18,20 @@ import {
     BsFillMoonStarsFill,
     BsSun,
     BsArrowCounterclockwise,
-    BsArrowClockwise
+    BsArrowClockwise,
+    BsTextParagraph,
+    BsTypeH1,
+    BsTypeH2,
+    BsListUl,
+    BsListOl,
+    BsBlockquoteRight,
+    BsChatSquareQuote,
+    BsQuote,
+    BsTypeBold,
+    BsTypeItalic,
+    BsTypeUnderline,
+    BsTypeStrikethrough,
+    BsLink
 } from "react-icons/bs"
 
 export const CreateIcon = () => {
@@ -111,3 +124,48 @@ export const UndoIcon = () => {
 export const RedoIcon = () => {
     return <Icon component={BsArrowClockwise} />
 }
+
+export const ParagraphIcon = () => {
+    return <Icon component={BsTextParagraph} />
+}
+
+export const H1Icon = () => {
+    return <Icon component={BsTypeH1} />
+}
+
+export const H2Icon = () => {
+    return <Icon component={BsTypeH2} />
+}
+
+export const BulletedListIcon = () => {
+    return <Icon component={BsListUl} />
+}
+
+export const NumberedListIcon = () => {
+    return <Icon component={BsListOl} />
+}
+
+export const QuoteIcon = () => {
+    return <Icon component={BsQuote} />
+}
+
+export const BoldIcon = () => {
+    return <Icon component={BsTypeBold} />
+}  
+
+export const ItalicIcon = () => {
+    return <Icon component={BsTypeItalic} />
+}
+
+export const UnderlineIcon = () => {
+    return <Icon component={BsTypeUnderline} />
+}
+
+export const StrikethroughIcon = () => {
+    return <Icon component={BsTypeStrikethrough} />
+}
+
+export const LinkIcon = () => {
+    return <Icon component={BsLink} />
+}
+
