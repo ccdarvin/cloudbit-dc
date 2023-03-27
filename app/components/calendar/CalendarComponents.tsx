@@ -2,10 +2,12 @@ import { Button, Col, Row, Segmented, Space, Tooltip, Typography } from 'antd'
 import dayjs from 'dayjs'
 import { NextIcon, PrevIcon, TodayIcon } from '../icons'
 import { Navigate } from "react-big-calendar"
+import { useSearchParams } from '@remix-run/react'
 
 export const CalendarComponents = {
     toolbar({ label, localizer, onNavigate, onView, view, views }: any){
         const { messages } = localizer
+        const [ searchParams, setSearchParams ] = useSearchParams()
         return <Row justify="space-between" align="middle" style={{paddingBottom: '1rem'}}>
             <Col>
                 <Space.Compact>
@@ -21,7 +23,11 @@ export const CalendarComponents = {
             <Col>
                 <Segmented
                     value={view}
-                    onChange={(value: any) => onView(value)}
+                    onChange={(value: any) => {
+                        onView(value)
+                        searchParams.set('view', value)
+                        setSearchParams(searchParams)
+                    }}
                     options={(views as []).map((view) => ({
                         value: view,
                         label: view,

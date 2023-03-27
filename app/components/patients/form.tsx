@@ -10,7 +10,6 @@ export default function PatientsForm(
         resource: "countries",
         optionLabel: "name",
         optionValue: "id",
-
         pagination: {
             mode: "server"
         }

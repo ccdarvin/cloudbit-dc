@@ -3,7 +3,7 @@ import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import {OnChangePlugin} from '@lexical/react/LexicalOnChangePlugin';
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
@@ -72,7 +72,10 @@ export default function RichEditor({
     onChange?: (value: string) => void;
 }) {
   return (
-    <LexicalComposer initialConfig={editorConfig}>
+    <LexicalComposer initialConfig={{
+      ...editorConfig,
+      editorState: value ? JSON.parse(value) : undefined
+    }}>
       <div>
         <ToolbarPlugin />
         <div style={{
@@ -90,6 +93,10 @@ export default function RichEditor({
             placeholder={<Placeholder />}
             ErrorBoundary={LexicalErrorBoundary}
           />
+          <OnChangePlugin onChange={(editorState: any) => {
+            const json = JSON.stringify(editorState)
+            onChange?.(json)
+          }} />
           <HistoryPlugin />
           <ListPlugin />
           <LinkPlugin />

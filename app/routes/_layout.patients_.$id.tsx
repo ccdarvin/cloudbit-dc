@@ -12,7 +12,7 @@ import {
 
 import { Link, Outlet,  useParams, useSearchParams } from "@remix-run/react"
 import TreatmentTable from "~/components/patients/TreatmentsTable"
-import { TreatmentIcon, UserIcon } from "~/components/icons"
+import { AppointmentIcon, NoteIcon, TaskIcon, TreatmentIcon, UserIcon } from "~/components/icons"
 import { Show } from "~/components/crud/Show"
 import { useShow } from "@refinedev/core"
 import type { TabsProps } from 'antd'
@@ -60,6 +60,15 @@ export default function EditPage() {
                         }}>
                             <Button type="link" key="2" icon={<TreatmentIcon />}>
                                     Crear tratamiento
+                            </Button>
+                            <Button type="link" key="3" icon={<AppointmentIcon />}>
+                                Crear cita
+                            </Button>
+                            <Button type="link" key="4" icon={<TaskIcon />}>
+                                Crear tarea
+                            </Button>
+                            <Button type="link" key="5" icon={<NoteIcon />}>
+                                Crear nota
                             </Button>
                         </Link>
                     ]}

@@ -31,8 +31,15 @@ import {
     BsTypeItalic,
     BsTypeUnderline,
     BsTypeStrikethrough,
-    BsLink
+    BsLink,
+    BsFileEarmarkCheck,
+    BsStopwatch,
+    BsCalendar3Event,
+    BsWatch,
+    BsFileEarmarkText
 } from "react-icons/bs"
+import { AiOutlineFileDone } from "react-icons/ai"
+import { CiStickyNote } from "react-icons/ci"
 
 export const CreateIcon = () => {
     return <Icon component={BsPlusSquare} />
@@ -167,5 +174,26 @@ export const StrikethroughIcon = () => {
 
 export const LinkIcon = () => {
     return <Icon component={BsLink} />
+}
+
+/************************************
+ *  events icons
+ ************************************/
+
+export const AppointmentIcon = () => {
+    return <Icon component={BsCalendar3Event} />
+}
+
+
+export const TaskIcon = () => {
+    return <Icon component={BsFileEarmarkCheck} />
+}
+
+export const ReminderIcon = () => {
+    return <Icon component={BsWatch} />
+}
+
+export const NoteIcon = () => {
+    return <Icon component={BsFileEarmarkText} />
 }
 

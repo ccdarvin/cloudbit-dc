@@ -16,10 +16,13 @@ export default function TimePicker({
     onChange?: (value: string | undefined) => void
     style?: React.CSSProperties
 }) {
+    const format = 'HH:mm:ss.SSS'
     return <TimePickerAnt
         {...props}
-        value={value ? dayjs(value, ['HH:mm:ss.SSS', 'HH:mm:ss', 'HH:mm']) : undefined}
+        value={value ? dayjs(value, [format]) : undefined}
         format="hh:mm a"
-        onChange={(value) => onChange?.(value ? value.format('HH:mm:ss.SSS'): undefined)}
+        onChange={(value) =>{
+            onChange?.(value ? value.format(format): undefined)
+        }}
     />
 }

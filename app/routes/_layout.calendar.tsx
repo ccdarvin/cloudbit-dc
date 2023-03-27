@@ -1,12 +1,11 @@
 
 import { Calendar } from 'react-big-calendar'
-import { dayjsLocalizer } from 'react-big-calendar'
+import { dayjsLocalizer, View } from 'react-big-calendar'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
-import type { Components } from 'react-big-calendar'
 import calendarStyle from '~/styles/calendar.css'
 import CalendarComponents from '~/components/calendar/CalendarComponents'
-import { Outlet, useSearchParams } from '@remix-run/react'
+import { useSearchParams } from '@remix-run/react'
 import EventCreate from '~/components/calendar/Create'
 import { useTable } from '@refinedev/antd'
 
@@ -15,6 +14,7 @@ const localizer = dayjsLocalizer(dayjs)
 export default function CaalendarPAge() {
 
     const { tableQueryResult: queryResult } = useTable()
+    const [searchParams, setSearchParams] = useSearchParams()
 
     // data for create event
     const [isCreateOpen, setIsCreateOpen] = useState(false)
@@ -31,12 +31,11 @@ export default function CaalendarPAge() {
             return {
                 id: event.id,
                 title: event.title,
-                start,
-                end
+                start: start.toDate(),
+                end: end.toDate(),
             }
         })
     }, [queryResult])
-
 
     return <div>
         <Calendar
@@ -44,12 +43,14 @@ export default function CaalendarPAge() {
             components={components}
             localizer={localizer}
             style={{ height: "calc(100vh - 128px)" }}
+            defaultView={searchParams.get('view') as View || 'week'}
             onSelectSlot={(slotInfo, ...props) => {
                 console.log(slotInfo, props)
                 setIsCreateOpen(true)
                 setInitialValues({
                     date: dayjs(slotInfo.start).format('YYYY-MM-DD'),
-                    time: dayjs(slotInfo.start).format('HH:mm'),
+                    time: dayjs(slotInfo.start).format('HH:mm:ss.SSS'),
+                    duration: dayjs(slotInfo.end).diff(dayjs(slotInfo.start), 'minute'),
                     type: 'appointment'
                 })
             }}

@@ -2,10 +2,6 @@ import { AutoComplete, Collapse, Form, Input, Segmented, Space, Tag } from "antd
 import type { FormProps } from "antd"
 import DatePicker from "../controls/DatePicker"
 import TimePicker from "../controls/TimePicker"
-import { useMany, HttpError, useList } from "@refinedev/core";
-import { useMemo } from "react";
-import { TreeSelect } from 'antd'
-import type { TreeSelectProps } from 'antd'
 import SelectDoctor from "../doctors/controls/SelectDoctor";
 import SelectPatient from "../patients/controls/SelectPatient";
 import SelectTreatment from "../treatments/controls/SelectTreatment";
@@ -81,7 +77,7 @@ export default function EventForm({
                 </Form.Item>
             </Space.Compact>
         </Form.Item>
-        <Collapse defaultActiveKey={['1']}>
+        <Collapse defaultActiveKey={['1']} ghost>
             <Collapse.Panel header="Relacionado con" key="1">
                 <Space.Compact block>
                     <Form.Item
