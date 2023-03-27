@@ -15,10 +15,12 @@ import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { TRANSFORMERS } from "@lexical/markdown";
-
+import { $generateHtmlFromNodes } from '@lexical/html';
+import { $rootTextContent } from '@lexical/text';
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
 import AutoLinkPlugin from "./plugins/AutoLinkPlugin";
 import { Typography } from "antd";
+import { $getRoot, $getSelection } from "lexical";
 
 function Placeholder({
   children,
@@ -64,17 +66,24 @@ const editorConfig: any = {
   ]
 };
 
+
+type valueProps ={
+  json: string;
+  text: string;
+  html: string;
+}
+
 export default function RichEditor({
     value,
     onChange,
 }: {
-    value?: string;
-    onChange?: (value: string) => void;
+    value?: valueProps;
+    onChange?: (value: valueProps) => void;
 }) {
   return (
     <LexicalComposer initialConfig={{
       ...editorConfig,
-      editorState: value ? JSON.parse(value) : undefined
+      editorState: value ? JSON.parse(value.json) : undefined
     }}>
       <div>
         <ToolbarPlugin />
@@ -93,9 +102,21 @@ export default function RichEditor({
             placeholder={<Placeholder />}
             ErrorBoundary={LexicalErrorBoundary}
           />
-          <OnChangePlugin onChange={(editorState: any) => {
-            const json = JSON.stringify(editorState)
-            onChange?.(json)
+          <OnChangePlugin onChange={(editorState: any, editor: any) => {
+            editorState.read(() => {
+              // Read the contents of the EditorState here.
+              const root = $getRoot()
+              const selection = $getSelection()
+              const json = JSON.stringify(editorState.toJSON()) 
+              const text = $rootTextContent()
+              const html = $generateHtmlFromNodes(editor, null)
+              onChange?.({
+                json,
+                text,
+                html
+              })
+            });
+            //onChange?.()
           }} />
           <HistoryPlugin />
           <ListPlugin />

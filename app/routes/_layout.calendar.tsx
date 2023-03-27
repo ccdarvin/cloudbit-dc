@@ -11,7 +11,7 @@ import { useTable } from '@refinedev/antd'
 
 const localizer = dayjsLocalizer(dayjs)
 
-export default function CaalendarPAge() {
+export default function CalendarPage() {
 
     const { tableQueryResult: queryResult } = useTable()
     const [searchParams, setSearchParams] = useSearchParams()

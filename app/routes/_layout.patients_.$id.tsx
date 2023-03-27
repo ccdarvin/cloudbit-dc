@@ -17,6 +17,8 @@ import { Show } from "~/components/crud/Show"
 import { useShow } from "@refinedev/core"
 import type { TabsProps } from 'antd'
 import dayjs from "dayjs"
+import NoteCreate from "~/components/note/NoteCreate"
+import NoteList from "~/components/note/NoteList"
 
 
 
@@ -40,8 +42,17 @@ export default function EditPage() {
             label: 'Tratamientos',
             children: <TreatmentTable patientId={id as string} />
         },
+        {
+            key: 'notes',
+            label: 'Notas',
+            children: <NoteList patient={id as string} />
+        },
     ]
     
+    const handlerCreate = (type: string) => {
+        searchParams.set('create', type)
+        setSearchParams(searchParams)
+    }
 
     return <Show
         isLoading={isLoading}
@@ -54,23 +65,23 @@ export default function EditPage() {
             }}>
                 <Card
                     actions={[
-                        <Link to={{
-                            pathname: 'treatments',
-                            search: searchParams.toString(),
-                        }}>
-                            <Button type="link" key="2" icon={<TreatmentIcon />}>
-                                    Crear tratamiento
-                            </Button>
-                            <Button type="link" key="3" icon={<AppointmentIcon />}>
-                                Crear cita
-                            </Button>
-                            <Button type="link" key="4" icon={<TaskIcon />}>
-                                Crear tarea
-                            </Button>
-                            <Button type="link" key="5" icon={<NoteIcon />}>
-                                Crear nota
-                            </Button>
-                        </Link>
+                        <Button type="link" key="1" icon={<TreatmentIcon />}>
+                                Crear tratamiento
+                        </Button>,
+                        <Button type="link" key="2" icon={<AppointmentIcon />}>
+                            Crear cita
+                        </Button>,
+                        <Button type="link" key="3" icon={<TaskIcon />}>
+                            Crear tarea
+                        </Button>,
+                        <Button 
+                            key="4"
+                            type="link" 
+                            icon={<NoteIcon />}
+                            onClick={() => handlerCreate('note')}
+                        >
+                            Crear nota
+                        </Button>
                     ]}
                 >
                     <Space style={{
@@ -114,17 +125,21 @@ export default function EditPage() {
                 <div>
                     <Tabs
                         items={tabItems}
+                        defaultActiveKey={searchParams?.get('tab') || 'info'}
                         onChange={(key) => {
                             setSearchParams({
                                 tab: key,
                             })
                         }}
-                        accessKey={searchParams?.get('tab') || 'info'}
                     />
                 </div>
             <div>
                 <Outlet />
             </div>
+            <NoteCreate 
+                open={searchParams?.get('create') === 'note'} 
+                patient={id as string} 
+            />
         </div>
     </Show>
 }
