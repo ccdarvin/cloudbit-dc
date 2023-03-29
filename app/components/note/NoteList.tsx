@@ -34,6 +34,7 @@ export default function NoteList({
         columns={[
             {
                 title: 'Nota',
+                dataIndex: 'note',
                 render: (_, record) => <div dangerouslySetInnerHTML={{ __html: record.note.html }} />
             }
         ]}

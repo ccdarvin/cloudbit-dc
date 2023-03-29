@@ -43,7 +43,6 @@ export const authProvider: AuthBindings = {
             path: "/",
             domain: window.location.hostname,
         });
-        console.log("logout", Cookies.get(TOKEN_KEY));
         return {
             success: true,
             redirectTo: "/login",
@@ -61,7 +60,6 @@ export const authProvider: AuthBindings = {
         return {};
     },
     check: async (request) => {
-        console.log("check", Cookies.get(TOKEN_KEY));
         let token = undefined;
         if (request) {
             const hasCookie = request.headers.get("Cookie");

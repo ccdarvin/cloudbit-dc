@@ -10,20 +10,20 @@ import NoteForm from "./NoteForm"
 
 export default function NoteCreate({
     open,
-    patient
+    patient,
+    onClose,
 }: {
     open: boolean,
     patient?: string,
+    onClose?: () => void
 }) {
-
-    const navigation = useNavigation()
 
     const { formProps, saveButtonProps } = useForm({
         action: "create",
         redirect: false,
         resource: "dc-notes",
         onMutationSuccess(data, variables, context) {
-            navigation.goBack()
+            onClose?.()
         },
     })
 
@@ -31,6 +31,8 @@ export default function NoteCreate({
         <CreateDrawer
             open={open}
             size="default"
+            onClose={onClose}
+            back={false}
             saveButtonProps={saveButtonProps}
         >
             <NoteForm 

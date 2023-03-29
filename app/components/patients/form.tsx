@@ -1,7 +1,15 @@
 
 import { useSelect } from "@refinedev/antd";
-import { Form, Input, Select, DatePicker, Space, Divider } from "antd";
+import { Form, Input, Select, DatePicker, Space, Divider, Upload } from "antd";
 import dayjs from "dayjs";
+import {
+    useStrapiUpload,
+    mediaUploadMapper,
+    getValueProps,
+} from "@refinedev/strapi-v4"
+import { useApiUrl } from "@refinedev/core"
+import { useMatches } from "react-router";
+import { axiosInstance } from "~/authProvider";
 
 export default function PatientsForm(
     { formProps} : any
@@ -14,7 +22,85 @@ export default function PatientsForm(
             mode: "server"
         }
     })
+
+    const API_URL = useApiUrl()
+    const [rootLoaderData] = useMatches()
+    const { ...uploadProps } = useStrapiUpload({
+        maxCount: 1,
+    })
+    const { token }: any = rootLoaderData?.data || {}
+    if (token) {
+        axiosInstance.defaults.headers.common = {
+          Authorization: `Bearer ${token}`,
+        };
+    }
     return <Form {...formProps} layout="vertical">
+    <Form.Item label="Image">
+                    <Form.Item
+                        name="image"
+                        valuePropName="fileList"
+                        getValueProps={(data) =>
+                            getValueProps(data, API_URL)
+                        }
+                        noStyle
+                        rules={[
+                            {
+                                required: true,
+                            },
+                        ]}
+                    >
+                        <Upload.Dragger
+                            name="files"
+                            action={`${API_URL}/upload`}
+                            customRequest={async (options: any) => {
+                                // upload to strapi using axios
+                                const { file, onSuccess, onError, onUploadProgress } = options
+                                const formData = new FormData()
+                                formData.append("files", file)
+                                try {
+                                    const response = await axiosInstance.post(
+                                        `${API_URL}/upload`,
+                                        formData,
+                                        {
+                                            headers: {
+                                                "Content-Type": "multipart/form-data",
+                                            },
+                                            onUploadProgress(progressEvent) {
+                                                const { loaded, total } = progressEvent
+                                                onUploadProgress(
+                                                    {
+                                                        percent: Math.floor(
+                                                            (loaded * 100) / total
+                                                        ),
+                                                    },
+                                                    file
+                                                )
+                                            },
+                                        }
+                                    )
+                                    onSuccess(response.data, file)
+                                } catch (error) {
+                                    onError(error)
+                                }
+                            }}
+                            onRemove={async (file) => {
+                                const {id} = file.response[0]
+                                try {
+                                    await axiosInstance.delete(`${API_URL}/upload/files/${id}`)
+                                } catch (error) {
+                                    console.log(error)
+                                }
+                            }}
+                            listType="picture"
+                            multiple={false}
+                            {...uploadProps}
+                        >
+                            <p className="ant-upload-text">
+                                Drag & drop a file in this area
+                            </p>
+                        </Upload.Dragger>
+                    </Form.Item>
+                </Form.Item>
     <Form.Item label="Nombre" required>
         <Input.Group compact style={{display: "flex"}}>
             <Form.Item

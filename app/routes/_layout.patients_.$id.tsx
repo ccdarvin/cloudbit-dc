@@ -1,6 +1,5 @@
 
 import {
-    Avatar,
     Button,
     Card,
     Descriptions,
@@ -19,6 +18,7 @@ import type { TabsProps } from 'antd'
 import dayjs from "dayjs"
 import NoteCreate from "~/components/note/NoteCreate"
 import NoteList from "~/components/note/NoteList"
+import UploadAvatar from "~/components/patients/controls/UploadAvatar"
 
 
 
@@ -65,14 +65,20 @@ export default function EditPage() {
             }}>
                 <Card
                     actions={[
+                        <Typography.Text 
+                            strong key="0"
+                            style={{cursor: 'auto'}}
+                        >
+                            Crear
+                        </Typography.Text>,
                         <Button type="link" key="1" icon={<TreatmentIcon />}>
-                                Crear tratamiento
+                                tratamiento
                         </Button>,
                         <Button type="link" key="2" icon={<AppointmentIcon />}>
-                            Crear cita
+                            Cita
                         </Button>,
                         <Button type="link" key="3" icon={<TaskIcon />}>
-                            Crear tarea
+                            Tarea
                         </Button>,
                         <Button 
                             key="4"
@@ -80,7 +86,7 @@ export default function EditPage() {
                             icon={<NoteIcon />}
                             onClick={() => handlerCreate('note')}
                         >
-                            Crear nota
+                            Nota
                         </Button>
                     ]}
                 >
@@ -88,12 +94,7 @@ export default function EditPage() {
                         display: 'flex',
                         alignItems: 'initial',
                     }}>
-                        <Space direction="vertical" style={{minWidth: '15rem'}} align="center">
-                            <Avatar size={128} icon={<UserIcon />} />
-                            <Space>
-                                <Typography.Text strong>{patient?.firstName} {patient?.lastName}</Typography.Text>
-                            </Space>
-                        </Space>
+                        <UploadAvatar patient={patient} />
                         <Divider type="vertical" style={{ height: '100%' }}/>
                         <Descriptions column={2}>
                             <Descriptions.Item label="Edad">
@@ -124,22 +125,27 @@ export default function EditPage() {
                 </Card>
                 <div>
                     <Tabs
+                        animated={true}
                         items={tabItems}
                         defaultActiveKey={searchParams?.get('tab') || 'info'}
                         onChange={(key) => {
-                            setSearchParams({
-                                tab: key,
-                            })
+                            searchParams.set('tab', key)
+                            setSearchParams(searchParams)
                         }}
                     />
                 </div>
             <div>
                 <Outlet />
             </div>
-            <NoteCreate 
-                open={searchParams?.get('create') === 'note'} 
+            { searchParams?.get('create') === 'note' && <NoteCreate 
+                open
+                onClose={() => {
+                    searchParams.delete('create')
+                    setSearchParams(searchParams)
+                }}
                 patient={id as string} 
             />
+            }
         </div>
     </Show>
 }

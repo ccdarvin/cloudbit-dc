@@ -66,7 +66,6 @@ const editorConfig: any = {
   ]
 };
 
-
 type valueProps ={
   json: string;
   text: string;
@@ -80,10 +79,11 @@ export default function RichEditor({
     value?: valueProps;
     onChange?: (value: valueProps) => void;
 }) {
+
   return (
     <LexicalComposer initialConfig={{
       ...editorConfig,
-      editorState: value ? JSON.parse(value.json) : undefined
+      editorState: value?.json
     }}>
       <div>
         <ToolbarPlugin />
@@ -107,7 +107,7 @@ export default function RichEditor({
               // Read the contents of the EditorState here.
               const root = $getRoot()
               const selection = $getSelection()
-              const json = JSON.stringify(editorState.toJSON()) 
+              const json = JSON.stringify(editorState) 
               const text = $rootTextContent()
               const html = $generateHtmlFromNodes(editor, null)
               onChange?.({
