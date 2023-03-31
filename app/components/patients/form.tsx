@@ -1,15 +1,12 @@
 
-import { useSelect } from "@refinedev/antd";
-import { Form, Input, Select, DatePicker, Space, Divider, Upload } from "antd";
-import dayjs from "dayjs";
-import {
-    useStrapiUpload,
-    mediaUploadMapper,
-    getValueProps,
-} from "@refinedev/strapi-v4"
-import { useApiUrl } from "@refinedev/core"
-import { useMatches } from "react-router";
-import { axiosInstance } from "~/authProvider";
+import { mediaUploadMapper } from "@refinedev/strapi-v4"
+import { Form, Input, Select, Space, Divider, Col, Row } from "antd"
+import UploadAvatar from "../controls/UploadAvatar"
+import { useSelect, } from "@refinedev/antd"
+import dayjs from "dayjs"
+import SelectSex from "../controls/SelectSex"
+import DatePicker from "../controls/DatePicker"
+
 
 export default function PatientsForm(
     { formProps} : any
@@ -20,89 +17,25 @@ export default function PatientsForm(
         optionValue: "id",
         pagination: {
             mode: "server"
-        }
+        },
     })
 
-    const API_URL = useApiUrl()
-    const [rootLoaderData] = useMatches()
-    const { ...uploadProps } = useStrapiUpload({
-        maxCount: 1,
-    })
-    const { token }: any = rootLoaderData?.data || {}
-    if (token) {
-        axiosInstance.defaults.headers.common = {
-          Authorization: `Bearer ${token}`,
-        };
-    }
-    return <Form {...formProps} layout="vertical">
-    <Form.Item label="Image">
-                    <Form.Item
-                        name="image"
-                        valuePropName="fileList"
-                        getValueProps={(data) =>
-                            getValueProps(data, API_URL)
-                        }
-                        noStyle
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
-                    >
-                        <Upload.Dragger
-                            name="files"
-                            action={`${API_URL}/upload`}
-                            customRequest={async (options: any) => {
-                                // upload to strapi using axios
-                                const { file, onSuccess, onError, onUploadProgress } = options
-                                const formData = new FormData()
-                                formData.append("files", file)
-                                try {
-                                    const response = await axiosInstance.post(
-                                        `${API_URL}/upload`,
-                                        formData,
-                                        {
-                                            headers: {
-                                                "Content-Type": "multipart/form-data",
-                                            },
-                                            onUploadProgress(progressEvent) {
-                                                const { loaded, total } = progressEvent
-                                                onUploadProgress(
-                                                    {
-                                                        percent: Math.floor(
-                                                            (loaded * 100) / total
-                                                        ),
-                                                    },
-                                                    file
-                                                )
-                                            },
-                                        }
-                                    )
-                                    onSuccess(response.data, file)
-                                } catch (error) {
-                                    onError(error)
-                                }
-                            }}
-                            onRemove={async (file) => {
-                                const {id} = file.response[0]
-                                try {
-                                    await axiosInstance.delete(`${API_URL}/upload/files/${id}`)
-                                } catch (error) {
-                                    console.log(error)
-                                }
-                            }}
-                            listType="picture"
-                            multiple={false}
-                            {...uploadProps}
-                        >
-                            <p className="ant-upload-text">
-                                Drag & drop a file in this area
-                            </p>
-                        </Upload.Dragger>
-                    </Form.Item>
-                </Form.Item>
+    return <Form 
+        {...formProps} 
+        layout="vertical"
+        onFinish={async (values) => {
+            console.log(values)
+            console.log(mediaUploadMapper(values))
+            formProps.onFinish?.(
+                mediaUploadMapper(values)
+            )
+        }}
+        onFieldsChange={(changedFields, allFields) => {
+            console.log(changedFields, allFields)
+        }}
+    >
     <Form.Item label="Nombre" required>
-        <Input.Group compact style={{display: "flex"}}>
+        <Space.Compact block>
             <Form.Item
                 name={["firstName"]}
                 noStyle
@@ -112,7 +45,7 @@ export default function PatientsForm(
                     },
                 ]}
             >
-                <Input placeholder="Nombres"/>
+                <Input size="large" placeholder="Nombres"/>
             </Form.Item>
             <Form.Item
                 name={["lastName"]}
@@ -123,38 +56,48 @@ export default function PatientsForm(
                     },
                 ]}
             >
-                <Input placeholder="Apellidos"/>
+                <Input size="large" placeholder="Apellidos"/>
             </Form.Item>
-        </Input.Group>
+        </Space.Compact>
     </Form.Item>
-    <Space.Compact block>
-        <Form.Item
-            label="Fecha de nacimiento"
-            name={["birthDate"]}
-            style={{width: "50%"}}
-            getValueProps={(value) => ({
-                value: value ? dayjs(value) : undefined,
-            })}
-        >
-            <DatePicker style={{width: '100%'}}  />
-        </Form.Item>
-        <Form.Item
-            label="Sexo"
-            name={['sex']}
-            style={{width: "50%"}}
-        >
-            <Select placeholder="Seleccionar" options={[
-                {label: "Masculino", value: "M"},
-                {label: "Femenino", value: "F"},
-            ]}/>
-        </Form.Item>
-    </Space.Compact>
-    <Form.Item
-        label="Documento de identidad"
-        name={["idCardNumber"]}
-    >
-        <Input />
-    </Form.Item>
+    <Row gutter={24} align="middle">
+        <Col flex="none">
+            <Form.Item
+                name="avatar"
+                noStyle
+                rules={[
+                    {
+                        required: true,
+                    },
+                ]}
+            >
+                <UploadAvatar  />
+            </Form.Item>
+        </Col>
+        <Col flex="auto">
+            <Form.Item
+                label="Documento de identidad"
+                name={["idCardNumber"]}
+            >
+                <Input />
+            </Form.Item>
+            <Form.Item
+                label="Fecha de nacimiento"
+                name={["birthDate"]}
+                getValueProps={(value) => ({
+                    value: value ? dayjs(value) : undefined,
+                })}
+            >
+                <DatePicker />
+            </Form.Item>
+            <Form.Item
+                label="Sexo"
+                style={{width: "50%"}}
+            >
+                <SelectSex/>
+            </Form.Item>
+        </Col>
+    </Row>
     <Space.Compact block>
         <Form.Item
             label="Correo electrónico"

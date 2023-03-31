@@ -18,14 +18,18 @@ import type { TabsProps } from 'antd'
 import dayjs from "dayjs"
 import NoteCreate from "~/components/note/NoteCreate"
 import NoteList from "~/components/note/NoteList"
-import UploadAvatar from "~/components/patients/controls/UploadAvatar"
+import AvatarField from "~/components/fields/AvatarField"
 
 
 
 
 export default function EditPage() {
     const { id } = useParams()
-    const { queryResult } = useShow();
+    const { queryResult } = useShow({
+        meta: {
+            populate: ['avatar'],
+        }
+    });
     const { data, isLoading } = queryResult;
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -94,7 +98,7 @@ export default function EditPage() {
                         display: 'flex',
                         alignItems: 'initial',
                     }}>
-                        <UploadAvatar patient={patient} />
+                        <AvatarField value={patient?.avatar} size={128} />
                         <Divider type="vertical" style={{ height: '100%' }}/>
                         <Descriptions column={2}>
                             <Descriptions.Item label="Edad">

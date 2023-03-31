@@ -82,8 +82,8 @@ export const SettingsIcon = () => {
     return <Icon component={BsGearWide} />
 }
 
-export const UserIcon = () => {
-    return <Icon component={BsPerson} />
+export const UserIcon = (props: any) => {
+    return <Icon {...props} component={BsPerson} />
 }
 
 export const MoreIcon = () => {

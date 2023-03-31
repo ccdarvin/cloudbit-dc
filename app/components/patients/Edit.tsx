@@ -16,6 +16,9 @@ export default function PatientEdit({
         action: "edit",
         id: searchParams.get('id') || undefined,
         redirect,
+        meta: {
+            populate: ['avatar'],
+        }
     })
     return <div>
         <EditDrawer
