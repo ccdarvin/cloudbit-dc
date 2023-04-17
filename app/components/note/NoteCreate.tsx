@@ -4,7 +4,6 @@ create drawere note
 */
 
 import { useForm } from "@refinedev/antd"
-import { useNavigation } from "@refinedev/core"
 import CreateDrawer from "../crud/CreateDrawer"
 import NoteForm from "./NoteForm"
 
@@ -31,6 +30,7 @@ export default function NoteCreate({
         <CreateDrawer
             open={open}
             size="default"
+            title="Crear nota"
             onClose={onClose}
             back={false}
             saveButtonProps={saveButtonProps}

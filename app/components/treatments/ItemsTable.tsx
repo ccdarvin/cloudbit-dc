@@ -16,7 +16,7 @@ export default function ItemsTable ({
 }) {
     return <Table
         size={size}
-        dataSource={dataSource?.map((item: any, index: number) => ({key: index, ...item}) )}
+        dataSource={dataSource?.map((item: any, index: number) => ({key: index, ...item}))}
         pagination={false}
         summary={(currentData) => {
             // round to 2 decimals

@@ -19,6 +19,7 @@ import dayjs from "dayjs"
 import NoteCreate from "~/components/note/NoteCreate"
 import NoteList from "~/components/note/NoteList"
 import AvatarField from "~/components/fields/AvatarField"
+import NoteEdit from "~/components/note/NoteEdit"
 
 
 
@@ -54,8 +55,26 @@ export default function EditPage() {
     ]
     
     const handlerCreate = (type: string) => {
-        searchParams.set('create', type)
+        searchParams.set(type, 'create')
         setSearchParams(searchParams)
+    }
+
+
+    const CreateOrEditNote = () => {
+        
+        const closeDrawer = () => {
+            searchParams.delete('note')
+            setSearchParams(searchParams)
+        }
+
+        if (searchParams.get('note') === 'create') {
+            return <NoteCreate 
+                open
+                onClose={closeDrawer}
+                patient={id as string} 
+            />
+        }
+        return null
     }
 
     return <Show
@@ -141,15 +160,7 @@ export default function EditPage() {
             <div>
                 <Outlet />
             </div>
-            { searchParams?.get('create') === 'note' && <NoteCreate 
-                open
-                onClose={() => {
-                    searchParams.delete('create')
-                    setSearchParams(searchParams)
-                }}
-                patient={id as string} 
-            />
-            }
+            <CreateOrEditNote />
         </div>
     </Show>
 }
