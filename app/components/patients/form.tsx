@@ -24,14 +24,9 @@ export default function PatientsForm(
         {...formProps} 
         layout="vertical"
         onFinish={async (values) => {
-            console.log(values)
-            console.log(mediaUploadMapper(values))
             formProps.onFinish?.(
                 mediaUploadMapper(values)
             )
-        }}
-        onFieldsChange={(changedFields, allFields) => {
-            console.log(changedFields, allFields)
         }}
     >
     <Form.Item label="Nombre" required>

@@ -17,6 +17,7 @@ export default function NoteForm ({
         }
         formProps?.onFinish(values)
     }
+    console.log(formProps)
     return <Form 
         {...formProps} 
         layout="vertical"

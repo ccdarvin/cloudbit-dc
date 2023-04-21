@@ -2,6 +2,7 @@ import { SaveButton } from "@refinedev/antd";
 import { useNavigate } from "@remix-run/react"
 import { Drawer, Space, Spin } from "antd"
 import { useEffect, useState } from "react"
+import { DeleteButton } from "../buttons";
 
 
 export default function EditDrawer ({
@@ -27,12 +28,16 @@ export default function EditDrawer ({
     }, [open])
     const navigate = useNavigate()
 
+    const maxWidth = size === "default" ? '40rem' : size === "large" ? '60rem' : size === "extraLarge" ? '80rem' : '100%'
+
     return <Drawer
         title={title}
         placement="right"
-        size={size}
+        width={'100%'}
+        contentWrapperStyle={{ maxWidth }}
         mask={false}
         open={_open}
+        destroyOnClose
         onClose={() => {
             if (back) {
                 navigate(-1)

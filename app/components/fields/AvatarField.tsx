@@ -16,7 +16,6 @@ export default function AvatarField({
 
     const [urlImage, setUrlImage] = useState<string | null>(null)
     const API_URL = useApiUrl()
-    console.log('value', value)
     useEffect(() => {
         if (value?.provider == 'local') {
             const url = new URL(`${API_URL}/..${value.url}`)

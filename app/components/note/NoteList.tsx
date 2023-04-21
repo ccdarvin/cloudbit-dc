@@ -1,8 +1,9 @@
-import { Button, Table } from "antd"
+import { Button, Dropdown, Table } from "antd"
 import { useTable } from "@refinedev/antd"
 import { useEffect } from "react"
 import { EditIcon } from "../icons"
 import { useSearchParams } from "@remix-run/react"
+import { DropdownActions } from "../buttons"
 
 
 export default function NoteList({
@@ -14,7 +15,13 @@ export default function NoteList({
     const { tableQueryResult, setFilters, tableProps } = useTable({
         resource: "dc-notes",
         meta: {
-            populate: ['note']
+            populate: ['note'],
+        },
+        sorters: {
+            initial: [{
+                field: "id",
+                order: "desc"
+            }]
         },
         syncWithLocation: false,
     })
@@ -40,17 +47,24 @@ export default function NoteList({
             },
             {
                 title: 'Fecha',
-                dataIndex: 'createdAt',
+                dataIndex: 'updatedAt',
                 render: (_, record) => <span>{new Date(record.createdAt).toLocaleDateString()}</span>
             },
             {
                 dataIndex: 'actions',
                 render: (_, record) => <div>
                     <Button type="link" onClick={() => {
-                        searchParams.set('note', record.id as string)
                         setSearchParams(searchParams)
                     }}
                      icon={<EditIcon />}
+                    />
+                    <DropdownActions
+                        editItem={{
+                            url: () =>  {
+                                searchParams.set('note', record.id as string)
+                                return `?${searchParams.toString()}`
+                            }
+                        }}
                     />
                 </div>
             }

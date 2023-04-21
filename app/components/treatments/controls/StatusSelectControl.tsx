@@ -8,7 +8,6 @@ const TagSelect = ({
     value: string,
 }) => {
     const status = TREATMENT_STATUS.find(status => status.value === value)
-    console.log(status, value)
     return <Tag 
         style={{ 
             marginRight: 3,

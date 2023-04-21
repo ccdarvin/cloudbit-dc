@@ -7,10 +7,12 @@ import NoteForm from "./NoteForm"
 export default function NoteEdit({
     open,
     onClose,
+    onSuccess,
     noteId,
 }: {
     open: boolean,
     onClose?: () => void,
+    onSuccess?: () => void,
     noteId: string,
 }) {
 
@@ -19,8 +21,11 @@ export default function NoteEdit({
         redirect: false,
         resource: "dc-notes",
         id: noteId,
+        meta: {
+            populate: ['note'],
+        },
         onMutationSuccess(data, variables, context) {
-            onClose?.()
+            onSuccess?.()
         },
     })
 

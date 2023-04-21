@@ -115,7 +115,6 @@ export default function UploadAvatar({
             try {
                 await axiosInstance.delete(`${API_URL}/upload/files/${id}`)
             } catch (error) {
-                console.log(error)
             }
         }}
         multiple={false}

@@ -30,7 +30,6 @@ export default function TreatmentForm({
 
     const [addProcedureOpen, setAddProcedureOpen] = useState(false)
     const items = Form.useWatch('items', formProps.form)
-    console.log(items)
     return <Form 
         {...formProps} 
         layout="vertical"

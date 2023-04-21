@@ -79,7 +79,7 @@ export default function RichEditor({
     value?: valueProps;
     onChange?: (value: valueProps) => void;
 }) {
-
+  console.log("value", value)
   return (
     <LexicalComposer initialConfig={{
       ...editorConfig,

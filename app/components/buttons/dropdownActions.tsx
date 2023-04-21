@@ -13,7 +13,7 @@ import { Button, Dropdown, Space } from "antd"
 import type { EditButtonProps, ShowButtonProps, DeleteButtonProps } from "@refinedev/antd"
 import { DeleteIcon, EditIcon, MoreIcon, ShowIcon } from "../icons";
 import { DeleteButton } from "./Delete";
-import { useSearchParams } from "@remix-run/react";
+import { Link, useSearchParams } from "@remix-run/react";
 
 /**
  * `<EditButton>` uses Ant Design's {@link https://ant.design/components/button/ `<Button>`} component.
@@ -24,31 +24,42 @@ import { useSearchParams } from "@remix-run/react";
  */
 
 type DropdownActionsProps = {
-    isEditPage?: boolean
+    editItem?: {
+        // string or function
+        url?: string | ((record?: any) => string) ,
+        hideText?: boolean,
+        show?: boolean
+    },
+    deleteItem?: {
+        url?: string | ((record?: any) => string),
+        hideText?: boolean,
+        show?: boolean
+    },
+    showItem?: {
+        url?: string | ((record?: any) => string),
+        hideText?: boolean,
+        show?: boolean
+    }
 }
 
 export const DropdownActions: React.FC<EditButtonProps & ShowButtonProps & DeleteButtonProps & DropdownActionsProps > = ({
   resource: resourceNameFromProps,
   recordItemId,
   hideText = false,
-  isEditPage = false,
+  editItem,
+  deleteItem,
+  showItem,
   accessControl,
   meta,
   children,
   ...rest
 }) => {
-    const accessControlEnabled = accessControl?.enabled ?? true;
-    const hideIfUnauthorized = accessControl?.hideIfUnauthorized ?? false;
-    const translate = useTranslate();
-
-    const routerType = useRouterType();
-    const Link = useLink();
-    const { Link: LegacyLink } = useRouterContext();
+    const accessControlEnabled = accessControl?.enabled ?? true
+    const translate = useTranslate()
 
     // const ActiveLink = routerType === "legacy" ? LegacyLink : Link;
 
-    const { editUrl: generateEditUrl, showUrl: generateShowUrl } = useNavigation();
-    const [ searchParams, setSearchParams ] = useSearchParams()
+    const { editUrl: generateEditUrl, showUrl: generateShowUrl } = useNavigation()
 
     const { id, resource } = useResource(
         resourceNameFromProps 
@@ -79,10 +90,10 @@ export const DropdownActions: React.FC<EditButtonProps & ShowButtonProps & Delet
         },
       });
 
-    const showUrl =
-      resource && (recordItemId || id)
+    const showUrl = (typeof showItem?.url === 'function'? showItem?.url(): showItem?.url ) ||
+      (resource && (recordItemId || id)
         ? generateShowUrl(resource, recordItemId! ?? id!, meta)
-        : "";
+        : "")
 
     const createButtonDisabledTitle = (data: any) => {
         if (data?.can) return "";
@@ -94,15 +105,10 @@ export const DropdownActions: React.FC<EditButtonProps & ShowButtonProps & Delet
         );
     };
 
-    let editUrl =
-        resource && (recordItemId ?? id)
+    let editUrl = (typeof editItem?.url === 'function'? editItem.url(): editItem?.url ) ||
+        (resource && (recordItemId ?? id)
         ? generateEditUrl(resource, recordItemId! ?? id!, meta)
-        : ""
-
-    if (!isEditPage) {
-        searchParams.set("edit", recordItemId as string)
-        editUrl = window.location.pathname + "?" + searchParams.toString()
-    }   
+        : "")
 
     const [confirmDelete, setConfirmDelete] = React.useState(false)
 
@@ -154,34 +160,4 @@ export const DropdownActions: React.FC<EditButtonProps & ShowButtonProps & Delet
             recordItemId={recordItemId} 
             onCancel={() => setConfirmDelete(false)} />}
     </>
-
-    //if (accessControlEnabled && hideIfUnauthorized && !data?.can) {
-    //    return null;
-    //}
-
-  //return (
-  //  <ActiveLink
-  //    to={editUrl}
-  //    replace={false}
-  //    onClick={(e: React.PointerEvent<HTMLButtonElement>) => {
-  //      if (data?.can === false) {
-  //        e.preventDefault();
-  //        return;
-  //      }
-  //      if (onClick) {
-  //        e.preventDefault();
-  //        onClick(e);
-  //      }
-  //    }}
-  //  >
-  //    <Button
-  //      icon={<EditOutlined />}
-  //      disabled={data?.can === false}
-  //      title={createButtonDisabledTitle()}
-  //      {...rest}
-  //    >
-  //      {!hideText && (children ?? translate("buttons.edit", "Edit"))}
-  //    </Button>
-  //  </ActiveLink>
-  //);
 };

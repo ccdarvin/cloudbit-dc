@@ -11,10 +11,12 @@ export default function NoteCreate({
     open,
     patient,
     onClose,
+    onSuccess
 }: {
     open: boolean,
     patient?: string,
-    onClose?: () => void
+    onClose?: () => void,
+    onSuccess?: () => void,
 }) {
 
     const { formProps, saveButtonProps } = useForm({
@@ -22,7 +24,7 @@ export default function NoteCreate({
         redirect: false,
         resource: "dc-notes",
         onMutationSuccess(data, variables, context) {
-            onClose?.()
+            onSuccess?.()
         },
     })
 

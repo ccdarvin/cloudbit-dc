@@ -45,7 +45,6 @@ export default function CalendarPage() {
             style={{ height: "calc(100vh - 128px)" }}
             defaultView={searchParams.get('view') as View || 'week'}
             onSelectSlot={(slotInfo, ...props) => {
-                console.log(slotInfo, props)
                 setIsCreateOpen(true)
                 setInitialValues({
                     date: dayjs(slotInfo.start).format('YYYY-MM-DD'),
