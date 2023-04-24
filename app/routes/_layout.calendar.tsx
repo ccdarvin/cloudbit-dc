@@ -13,7 +13,9 @@ const localizer = dayjsLocalizer(dayjs)
 
 export default function CalendarPage() {
 
-    const { tableQueryResult: queryResult } = useTable()
+    const { tableQueryResult: queryResult } = useTable({
+        syncWithLocation: false
+    })
     const [searchParams, setSearchParams] = useSearchParams()
 
     // data for create event

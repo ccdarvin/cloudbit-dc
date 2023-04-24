@@ -1,14 +1,11 @@
-import { useForm } from "@refinedev/antd";
 import CreateDrawer from "~/components/crud/CreateDrawer"
 import PatientsForm from "~/components/patients/form"
-
-const RESOURCE = "dc-patients"
+import { useForm } from "@refinedev/antd"
 
 
 export default function Patients() {
     const { formProps, saveButtonProps } = useForm({
-        action: "create",
-        resource: RESOURCE,
+        action: "create"
     })
 
     return <div>

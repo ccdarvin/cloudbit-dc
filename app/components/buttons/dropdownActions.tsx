@@ -1,19 +1,11 @@
 
-import React from "react";
-import {
-  useCan,
-  useNavigation,
-  useTranslate,
-  useResource,
-  useRouterContext,
-  useRouterType,
-  useLink,
-} from "@refinedev/core"
-import { Button, Dropdown, Space } from "antd"
 import type { EditButtonProps, ShowButtonProps, DeleteButtonProps } from "@refinedev/antd"
-import { DeleteIcon, EditIcon, MoreIcon, ShowIcon } from "../icons";
-import { DeleteButton } from "./Delete";
-import { Link, useSearchParams } from "@remix-run/react";
+import { useCan, useNavigation, useTranslate, useResource } from "@refinedev/core"
+import { DeleteIcon, EditIcon, MoreIcon, ShowIcon } from "../icons"
+import { Button, Dropdown, Space } from "antd"
+import DeleteButton from "./DeleteButton"
+import { Link } from "@remix-run/react"
+import React from "react"
 
 /**
  * `<EditButton>` uses Ant Design's {@link https://ant.design/components/button/ `<Button>`} component.
@@ -23,26 +15,20 @@ import { Link, useSearchParams } from "@remix-run/react";
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/edit-button} for more details.
  */
 
-type DropdownActionsProps = {
-    editItem?: {
-        // string or function
-        url?: string | ((record?: any) => string) ,
-        hideText?: boolean,
-        show?: boolean
-    },
-    deleteItem?: {
-        url?: string | ((record?: any) => string),
-        hideText?: boolean,
-        show?: boolean
-    },
-    showItem?: {
-        url?: string | ((record?: any) => string),
-        hideText?: boolean,
-        show?: boolean
-    }
+type ItemProps = {
+    url?: string | ((record?: any) => string) ,
+    hideText?: boolean,
+    hide?: boolean
 }
 
-export const DropdownActions: React.FC<EditButtonProps & ShowButtonProps & DeleteButtonProps & DropdownActionsProps > = ({
+type DropdownActionsProps = {
+    editItem?: ItemProps,
+    deleteItem?: ItemProps,
+    showItem?: ItemProps,
+}
+
+
+export default function DropdownActions ({
   resource: resourceNameFromProps,
   recordItemId,
   hideText = false,
@@ -53,7 +39,7 @@ export const DropdownActions: React.FC<EditButtonProps & ShowButtonProps & Delet
   meta,
   children,
   ...rest
-}) => {
+}: EditButtonProps & ShowButtonProps & DeleteButtonProps & DropdownActionsProps ) {
     const accessControlEnabled = accessControl?.enabled ?? true
     const translate = useTranslate()
 
@@ -157,7 +143,8 @@ export const DropdownActions: React.FC<EditButtonProps & ShowButtonProps & Delet
         {confirmDelete && <DeleteButton
             hideText
             type="link"
+            resource={resourceNameFromProps}
             recordItemId={recordItemId} 
             onCancel={() => setConfirmDelete(false)} />}
     </>
-};
+}

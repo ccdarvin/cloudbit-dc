@@ -1,12 +1,10 @@
-import { List, useTable, CreateButton } from "@refinedev/antd";
-
-// It is recommended to use explicit import as seen below to reduce bundle size.
-// import { IconName } from "@ant-design/icons";
-
-import { Table, Tooltip } from "antd";
-import { Link, Outlet} from "@remix-run/react"
+import DropdownActions from "~/components/buttons/DropdownActions"
+import { List, useTable, CreateButton } from "@refinedev/antd"
+import ShowLink from "~/components/buttons/ShowLink"
+import { Outlet } from "@remix-run/react"
+import { Table, Tooltip } from "antd"
 import dayjs from "dayjs"
-import { DropdownActions, ShowLink } from "~/components/buttons";
+
 
 
 export default function Patients() {
@@ -49,5 +47,4 @@ export default function Patients() {
         />
         <Outlet />
     </List>
-    
 }

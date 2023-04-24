@@ -23,7 +23,7 @@ interface DeleteButtonProps extends DeleteButtonPropsAntd {
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/delete-button} for more details.
  */
-export const DeleteButton: React.FC<DeleteButtonProps> = ({
+export default function DeleteButton({
   resource: resourceNameFromProps,
   recordItemId,
   onSuccess,
@@ -41,14 +41,16 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
   confirmCancelText,
   invalidates,
   ...rest
-}) => {
+}: DeleteButtonProps) {
   const accessControlEnabled = accessControl?.enabled ?? true;
   const hideIfUnauthorized = accessControl?.hideIfUnauthorized ?? false;
-  const translate = useTranslate();
+  const translate = useTranslate()
 
   const { id, resource } = useResource(
     resourceNameFromProps
-  );
+  )
+
+  console.log("resource", resource, id)
 
   const { mutationMode: mutationModeContext } = useMutationMode();
 
@@ -116,5 +118,5 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
         {!hideText && (children ?? translate("buttons.delete", "Delete"))}
       </Button>
     </Popconfirm>
-  );
-};
+  )
+}

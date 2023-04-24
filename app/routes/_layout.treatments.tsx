@@ -1,10 +1,10 @@
-import { List, useTable } from "@refinedev/antd";
-import { useSearchParams } from "@remix-run/react";
-
-import { Table } from "antd";
-import { DropdownActions, ShowLink } from "~/components/buttons";
-import { TreatmentEdit } from "~/components/treatments";
-import HeaderStatusField from "~/components/treatments/fields/HeaderStatusField";
+import HeaderStatusField from "~/components/treatments/fields/HeaderStatusField"
+import DropdownActions from "~/components/buttons/DropdownActions"
+import { TreatmentEdit } from "~/components/treatments"
+import ShowLink from "~/components/buttons/ShowLink"
+import { useSearchParams } from "@remix-run/react"
+import { List, useTable } from "@refinedev/antd"
+import { Table } from "antd"
 
 export default function Page() {
   const { tableProps } = useTable({

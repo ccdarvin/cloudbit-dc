@@ -1,9 +1,8 @@
-import { Button, Dropdown, Table } from "antd"
+import { Table } from "antd"
 import { useTable } from "@refinedev/antd"
 import { useEffect } from "react"
-import { EditIcon } from "../icons"
 import { useSearchParams } from "@remix-run/react"
-import { DropdownActions } from "../buttons"
+import DropdownActions from "~/components/buttons/DropdownActions"
 
 
 export default function NoteList({
@@ -53,12 +52,12 @@ export default function NoteList({
             {
                 dataIndex: 'actions',
                 render: (_, record) => <div>
-                    <Button type="link" onClick={() => {
-                        setSearchParams(searchParams)
-                    }}
-                     icon={<EditIcon />}
-                    />
                     <DropdownActions
+                        resource="dc-notes"
+                        recordItemId={record.id}
+                        showItem={{
+                            hide: false
+                        }}
                         editItem={{
                             url: () =>  {
                                 searchParams.set('note', record.id as string)

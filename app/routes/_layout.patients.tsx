@@ -1,17 +1,15 @@
-import { List, useTable } from "@refinedev/antd";
-import { Table, Tooltip } from "antd";
+import DropdownActions from "~/components/buttons/DropdownActions"
 import { Link, Outlet,  useSearchParams } from "@remix-run/react"
+import RefreshButton from "~/components/buttons/RefreshButton"
+import CreateButton from "~/components/buttons/CreateButton"
+import { PatientEdit } from "~/components/patients"
+import { List, useTable } from "@refinedev/antd"
+import { Table, Tooltip } from "antd"
 import dayjs from "dayjs"
-import { CreateButton } from "~/components/buttons/Create";
-import { RefreshButton } from "~/components/buttons/Refresh";
-import { DropdownActions } from "~/components/buttons/DropdownActions";
-import { PatientEdit } from "~/components/patients";
 
 
 export default function Patients() {
-    const { tableProps } = useTable({
-        syncWithLocation: true,
-    })
+    const { tableProps } = useTable({})
 
     const [ searchParams, setSearchParams ] = useSearchParams()
 

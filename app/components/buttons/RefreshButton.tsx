@@ -15,7 +15,7 @@ import type { RefreshButtonProps } from "@refinedev/antd";
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/refresh-button} for more details.
  */
-export const RefreshButton: React.FC<RefreshButtonProps> = ({
+export default function RefreshButton({
   resource: resourceNameFromProps,
   recordItemId,
   hideText = false,
@@ -25,7 +25,7 @@ export const RefreshButton: React.FC<RefreshButtonProps> = ({
   children,
   onClick,
   ...rest
-}) => {
+}: RefreshButtonProps) {
   const translate = useTranslate();
 
   const { resource, id } = useResource(

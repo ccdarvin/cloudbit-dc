@@ -17,7 +17,7 @@ import { Link } from "@remix-run/react";
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/show-button} for more details.
  */
-export const ShowLink: React.FC<ShowButtonProps> = ({
+export default function ShowLink ({
   resource: resourceNameFromProps,
   recordItemId,
   hideText = false,
@@ -26,7 +26,7 @@ export const ShowLink: React.FC<ShowButtonProps> = ({
   children,
   onClick,
   ...rest
-}) => {
+}: ShowButtonProps){
   const accessControlEnabled = accessControl?.enabled ?? true;
   const hideIfUnauthorized = accessControl?.hideIfUnauthorized ?? false;
   const { showUrl: generateShowUrl } = useNavigation();
@@ -71,4 +71,3 @@ export const ShowLink: React.FC<ShowButtonProps> = ({
     {!data?.can && (children ?? translate("buttons.show", "Show"))}
   </Tooltip>
 }
-

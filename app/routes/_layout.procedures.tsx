@@ -1,12 +1,9 @@
-import { List, useEditableTable } from "@refinedev/antd";
-
-// It is recommended to use explicit import as seen below to reduce bundle size.
-// import { IconName } from "@ant-design/icons";
-
-import { Table, Space, Button, InputNumber, Form } from "antd";
+import { Table, Space, Button, InputNumber, Form } from "antd"
 import LoadButton from "~/components/procedures/LoadButton"
-import { SaveButton, EditButton } from "~/components/buttons";
-import { CloseIcon, EditIcon } from "~/components/icons";
+import { CloseIcon, EditIcon } from "~/components/icons"
+import { List, useEditableTable } from "@refinedev/antd"
+import SaveButton from "~/components/buttons/SaveButton"
+
 
 export default function Page() {
     const {

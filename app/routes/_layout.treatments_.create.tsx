@@ -1,6 +1,6 @@
 
 import { useForm } from "@refinedev/antd"
-import { Create } from "~/components/crud"
+import { Create } from "~/components/crud/Create"
 import TreatmentForm from "~/components/treatments/form"
 
 

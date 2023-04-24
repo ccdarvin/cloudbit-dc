@@ -20,7 +20,7 @@ import { Link } from "@remix-run/react";
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/edit-button} for more details.
  */
-export const EditButton: React.FC<EditButtonProps> = ({
+export default function EditButton({
   resource: resourceNameFromProps,
   recordItemId,
   hideText = false,
@@ -29,7 +29,7 @@ export const EditButton: React.FC<EditButtonProps> = ({
   children,
   onClick,
   ...rest
-}) => {
+}: EditButtonProps){
   const accessControlEnabled = accessControl?.enabled ?? true;
   const hideIfUnauthorized = accessControl?.hideIfUnauthorized ?? false;
   const translate = useTranslate();
@@ -79,5 +79,5 @@ export const EditButton: React.FC<EditButtonProps> = ({
         {!hideText && (children ?? translate("buttons.edit", "Edit"))}
       </Button>
     </Link>
-  );
-};
+  )
+}

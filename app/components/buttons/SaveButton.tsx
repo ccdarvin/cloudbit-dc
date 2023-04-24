@@ -10,16 +10,16 @@ import { SaveIcon } from "../icons";
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/save-button} for more details.
  */
-export const SaveButton: React.FC<SaveButtonProps> = ({
+export default function SaveButton({
   hideText = false,
   children,
   ...rest
-}) => {
+}: SaveButtonProps) {
   const translate = useTranslate();
 
   return (
     <Button type="primary" icon={<SaveIcon />} {...rest}>
-      {!hideText && (children ?? translate("buttons.save", "Save"))}
+      {!hideText && (children ?? translate("buttons.save", "Guardar"))}
     </Button>
   );
 };

@@ -1,9 +1,5 @@
 import { useTable } from "@refinedev/antd";
 
-// It is recommended to use explicit import as seen below to reduce bundle size.
-// import { IconName } from "@ant-design/icons";
-import * as Icons from "@ant-design/icons";
-
 import { Table, Space, Button } from "antd";
 import { Link } from "@remix-run/react"
 

@@ -8,7 +8,6 @@ import {
   useRouterType,
   useLink,
 } from "@refinedev/core";
-import { PlusSquareOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import type { CreateButtonProps } from "@refinedev/antd";
 import { CreateIcon } from "../icons";
@@ -20,7 +19,7 @@ import { CreateIcon } from "../icons";
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/buttons/create-button} for more details.
  */
-export const CreateButton: React.FC<CreateButtonProps> = ({
+export default function CreateButton({
   resource: resourceNameFromProps,
   hideText = false,
   accessControl,
@@ -28,7 +27,7 @@ export const CreateButton: React.FC<CreateButtonProps> = ({
   children,
   onClick,
   ...rest
-}) => {
+}: CreateButtonProps) {
   const accessControlEnabled = accessControl?.enabled ?? true;
   const hideIfUnauthorized = accessControl?.hideIfUnauthorized ?? false;
   const translate = useTranslate();

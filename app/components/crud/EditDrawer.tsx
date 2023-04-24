@@ -1,8 +1,7 @@
-import { SaveButton } from "@refinedev/antd";
 import { useNavigate } from "@remix-run/react"
-import { Drawer, Space, Spin } from "antd"
 import { useEffect, useState } from "react"
-import { DeleteButton } from "../buttons";
+import { Drawer, Space, Spin } from "antd"
+import SaveButton from "../buttons/SaveButton"
 
 
 export default function EditDrawer ({
