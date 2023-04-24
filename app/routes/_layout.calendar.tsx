@@ -1,13 +1,16 @@
 
-import { Calendar } from 'react-big-calendar'
-import { dayjsLocalizer, View } from 'react-big-calendar'
-import dayjs from 'dayjs'
-import { useMemo, useState } from 'react'
-import calendarStyle from '~/styles/calendar.css'
 import CalendarComponents from '~/components/calendar/CalendarComponents'
-import { useSearchParams } from '@remix-run/react'
+import { dayjsLocalizer, View } from 'react-big-calendar'
 import EventCreate from '~/components/calendar/Create'
+import { useSearchParams } from '@remix-run/react'
+import calendarStyle from '~/styles/calendar.css'
+import { Calendar } from 'react-big-calendar'
 import { useTable } from '@refinedev/antd'
+import { useMemo, useState } from 'react'
+import { createStyles } from 'antd-style'
+import dayjs from 'dayjs'
+import { useStylesCalendar } from '~/components/calendar/styles'
+
 
 const localizer = dayjsLocalizer(dayjs)
 
@@ -17,6 +20,7 @@ export default function CalendarPage() {
         syncWithLocation: false
     })
     const [searchParams, setSearchParams] = useSearchParams()
+    const { styles, cx } = useStylesCalendar()
 
     // data for create event
     const [isCreateOpen, setIsCreateOpen] = useState(false)
@@ -41,6 +45,7 @@ export default function CalendarPage() {
 
     return <div>
         <Calendar
+            className={cx(styles.calendar)}
             events={events}
             components={components}
             localizer={localizer}
