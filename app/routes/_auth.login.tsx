@@ -1,9 +1,6 @@
 import { AuthPage } from "@refinedev/antd";
+import Login from "~/components/auth/Login";
 
-export default function Login() {
-    return <AuthPage
-        type="login"
-        formProps={{
-        }}
-    />
+export default function LoginPage() {
+    return <Login />
 }

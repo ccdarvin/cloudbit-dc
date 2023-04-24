@@ -1,51 +1,43 @@
-import React, { useContext } from "react";
-import { useGetIdentity, useActiveAuthProvider } from "@refinedev/core";
-import { Layout as AntdLayout, Typography, Avatar, Space, Dropdown, Switch } from "antd";
-import type { RefineLayoutHeaderProps } from "@refinedev/antd";
-import { DarkIcon, LightIcon, UserIcon } from "../icons";
-import { ColorModeContext } from "~/contexts";
+import { Layout as AntdLayout, Typography, Avatar, Space, theme } from "antd";
+import { useActiveAuthProvider, useGetIdentity } from "@refinedev/core";
+import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
 
+const { Text } = Typography;
+const { useToken } = theme;
 
-export const Header: React.FC<RefineLayoutHeaderProps> = () => {
+export default function ThemedHeaderV2 (
+  props: RefineThemedLayoutV2HeaderProps
+) {
+  const { token } = useToken();
+
   const authProvider = useActiveAuthProvider();
   const { data: user } = useGetIdentity({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
-  })
+  });
 
-  const AvatarUser = () => {
-    if (user.avatar) {
-      return <Avatar size="default" src={user?.avatar} alt={user?.name} />;
-    }
-    return <Avatar size="default" icon={<UserIcon />} />;
+  const shouldRenderHeader = user && (user.name || user.avatar);
+
+  if (!shouldRenderHeader) {
+    return null;
   }
 
-  const { mode, setMode } = useContext(ColorModeContext)
-
-  return <AntdLayout.Header
+  return (
+    <AntdLayout.Header
       style={{
+        backgroundColor: token.colorBgElevated,
         display: "flex",
         justifyContent: "flex-end",
         alignItems: "center",
         padding: "0px 24px",
         height: "64px",
-        background: "transparent",
       }}
     >
       <Space>
-        <Switch
-          checkedChildren={<DarkIcon />}
-          unCheckedChildren={<LightIcon />}
-          onChange={() => setMode(mode === "light" ? "dark" : "light")}
-          defaultChecked={mode === "dark"}
-        />
-        {user && (
-          <Typography.Text ellipsis strong>
-            {user?.name}
-          </Typography.Text>
-        )}
-        {user && (
-          <AvatarUser />
-        )}
+        <Space size="middle">
+          {user?.name && <Text strong>{user.name}</Text>}
+          {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
+        </Space>
       </Space>
     </AntdLayout.Header>
-};
+  )
+}

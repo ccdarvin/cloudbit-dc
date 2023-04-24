@@ -1,48 +1,25 @@
-import { json, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-} from "@remix-run/react";
-import { Refine } from "@refinedev/core";
-import { AuthPage, notificationProvider } from "@refinedev/antd";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from "@remix-run/react";
 import { CalendarIcon, PatientIcon, SettingsIcon, TreatmentIcon } from "./components/icons"
-
-import routerProvider, { UnsavedChangesNotifier } from "@refinedev/remix-router";
-import { DataProvider } from "@refinedev/strapi-v4";
-import resetStyle from "@refinedev/antd/dist/reset.css";
-import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-import { authProvider, axiosInstance } from "~/authProvider";
-import { API_URL, TOKEN_KEY } from "~/constants";
-import { ColorModeContextProvider } from "@contexts";
-import * as cookie from "cookie"
+import routerProvider, { UnsavedChangesNotifier } from "@refinedev/remix-router"
+import { AuthPage, notificationProvider } from "@refinedev/antd"
+import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar"
+import { authProvider, axiosInstance } from "~/authProvider"
 import localizedFormat from "dayjs/plugin/localizedFormat"
+import resetStyle from "@refinedev/antd/dist/reset.css"
+import { ColorModeContextProvider } from "@contexts"
+import { DataProvider } from "@refinedev/strapi-v4"
+import { json, LoaderArgs } from "@remix-run/node"
+import { API_URL, TOKEN_KEY } from "~/constants"
 import timezone from 'dayjs/plugin/timezone'
-import "dayjs/locale/es"
+import { Refine } from "@refinedev/core"
+import * as cookie from "cookie"
 import dayjs from "dayjs"
+import "dayjs/locale/es"
+
 
 dayjs.extend(localizedFormat)
 dayjs.extend(timezone)
 dayjs.locale('es')
-
-
-export const meta: V2_MetaFunction = () => [
-  {
-    title: "Cloudbit App",
-  },
-  {
-    name: "viewport",
-    content: "width=device-width, initial-scale=1",
-  },
-  {
-    name: "charset",
-    content: "utf-8",
-  },
-];
 
 export const loader = async ({ request }: LoaderArgs) => {
   const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "");
@@ -59,12 +36,14 @@ export default function App() {
   if (token) {
     axiosInstance.defaults.headers.common = {
       Authorization: `Bearer ${token}`,
-    };
+    }
   }
 
-  return (
-    <html lang="es">
+  return <html lang="es">
       <head>
+        <title>Cloudbit App</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
@@ -163,7 +142,6 @@ export default function App() {
         <LiveReload />
       </body>
     </html>
-  );
 }
 
 export function links() {

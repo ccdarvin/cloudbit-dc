@@ -1,22 +1,15 @@
-import { Layout } from "@refinedev/antd";
-import { Outlet } from "@remix-run/react";
 
-import type { LoaderArgs } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { authProvider } from "~/authProvider";
+import type { LoaderArgs } from "@remix-run/node"
+import Layout from "~/components/Layout"
+import { authProvider } from "~/authProvider"
+import { redirect } from "@remix-run/node"
+import { Outlet } from "@remix-run/react"
 
-import { Header } from "@components/layout/header";
-import { Sider } from "~/components/layout/sider";
-import { Title } from "~/components/layout/title";
 
 export default function BaseLayout() {
-  return (
-    <>
-      <Layout Header={Header} Sider={Sider} Title={Title} >
+    return <Layout>
         <Outlet />
-      </Layout>
-    </>
-  );
+    </Layout>
 }
 
 /**
