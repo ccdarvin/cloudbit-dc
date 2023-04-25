@@ -26,19 +26,15 @@ export default function handleRequest(
         onShellReady: () => {
           const styleText = extractStyle(cache)
           let body = new PassThrough({
-            transform: (chunk, _, done) => {
-              const stringChunk = (chunk as Buffer).toString();
-              done(
-                undefined,
-                Buffer.from(
-                  stringChunk.replace("__STYLES__", styleText)
-                )
-              );
+            transform: (chunk, _, callback) => {
+              // add styles to response
+              if (chunk.toString().match(/__STYLES__/) && styleText) {
+                chunk = chunk.toString().replace(/__STYLES__/, styleText)
+              }
+              return callback(null, chunk)
             }
           })
-
           responseHeaders.set("Content-Type", "text/html");
-
           resolve(
             new Response(body, {
               headers: responseHeaders,

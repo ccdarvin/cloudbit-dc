@@ -8,7 +8,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat"
 import resetStyle from "@refinedev/antd/dist/reset.css"
 import { ColorModeContextProvider } from "@contexts"
 import { DataProvider } from "@refinedev/strapi-v4"
-import { json, LoaderArgs } from "@remix-run/node"
+import { json, LoaderArgs, V2_MetaFunction } from "@remix-run/node"
 import { API_URL, TOKEN_KEY } from "~/constants"
 import timezone from 'dayjs/plugin/timezone'
 import { Refine } from "@refinedev/core"
@@ -22,15 +22,21 @@ dayjs.extend(timezone)
 dayjs.locale('es')
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "");
-  const token = parsedCookie[TOKEN_KEY];
-  const mode = parsedCookie["theme"];
+  const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "")
+  const token = parsedCookie[TOKEN_KEY]
+  const mode = parsedCookie["theme"]
   return json({
     token,
     mode,
-  });
-};
+  })
+}
 
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Dental Clinic" },
+    { name: "viewport", content: "width=device-width, initial-scale=1" }
+  ]
+}
 export default function App() {
   const { token, mode } = useLoaderData();
   if (token) {
@@ -41,11 +47,11 @@ export default function App() {
 
   return <html lang="es">
       <head>
-        <title>Cloudbit App</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {typeof document === "undefined"
+          ? "__STYLES__"
+          : null}
       </head>
       <body>
         <RefineKbarProvider>
