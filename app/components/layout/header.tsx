@@ -1,6 +1,14 @@
-import { Layout as AntdLayout, Typography, Avatar, Space, theme } from "antd";
-import { useActiveAuthProvider, useGetIdentity } from "@refinedev/core";
-import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
+import { Layout as AntdLayout, Typography, Avatar, Space, theme } from "antd"
+import { useActiveAuthProvider, useGetIdentity } from "@refinedev/core"
+import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd"
+import { createStyles } from "antd-style"
+
+const useStyles = createStyles(({token} : any) => ({
+  header: {
+    backgroundColor: 'transparent',
+  }
+}))
+
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -8,29 +16,16 @@ const { useToken } = theme;
 export default function ThemedHeaderV2 (
   props: RefineThemedLayoutV2HeaderProps
 ) {
-  const { token } = useToken();
-
-  const authProvider = useActiveAuthProvider();
+  const { token } = useToken()
+  const { styles } = useStyles()
+  const authProvider = useActiveAuthProvider()
   const { data: user } = useGetIdentity({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
-  });
-
-  const shouldRenderHeader = user && (user.name || user.avatar);
-
-  if (!shouldRenderHeader) {
-    return null;
-  }
+  })
 
   return (
     <AntdLayout.Header
-      style={{
-        backgroundColor: token.colorBgElevated,
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center",
-        padding: "0px 24px",
-        height: "64px",
-      }}
+      className={styles.header}
     >
       <Space>
         <Space size="middle">

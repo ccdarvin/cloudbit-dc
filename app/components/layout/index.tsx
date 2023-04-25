@@ -19,8 +19,8 @@ export default function ThemedLayoutV2({
   const isSmall = typeof breakpoint.sm === "undefined" ? true : breakpoint.sm;
 
   return (
-    <ThemedLayoutContextProvider>
-      <AntdLayout style={{ minHeight: "100vh" }}>
+    <ThemedLayoutContextProvider >
+      <AntdLayout hasSider style={{ minHeight: "100vh", display: "flex" }}>
         <SiderToRender Title={Title} />
         <AntdLayout>
           <HeaderToRender />
