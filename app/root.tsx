@@ -8,7 +8,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat"
 import resetStyle from "@refinedev/antd/dist/reset.css"
 import { ColorModeContextProvider } from "@contexts"
 import { DataProvider } from "@refinedev/strapi-v4"
-import { json, LoaderArgs, V2_MetaFunction } from "@remix-run/node"
+import { HeadersFunction, json, LoaderArgs, V2_MetaFunction } from "@remix-run/node"
 import { API_URL, TOKEN_KEY } from "~/constants"
 import timezone from 'dayjs/plugin/timezone'
 import { Refine } from "@refinedev/core"
@@ -20,6 +20,10 @@ import "dayjs/locale/es"
 dayjs.extend(localizedFormat)
 dayjs.extend(timezone)
 dayjs.locale('es')
+
+export const headers: HeadersFunction = () => ({
+  'Accept-CH': 'Sec-CH-Prefers-Color-Scheme',
+})
 
 export const loader = async ({ request }: LoaderArgs) => {
   const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "")
@@ -38,7 +42,7 @@ export const meta: V2_MetaFunction = () => {
   ]
 }
 export default function App() {
-  const { token, mode } = useLoaderData();
+  const { token, mode } = useLoaderData()
   if (token) {
     axiosInstance.defaults.headers.common = {
       Authorization: `Bearer ${token}`,

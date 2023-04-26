@@ -67,7 +67,7 @@ export function ColorModeContextProvider ({
     >
       <ConfigProvider
         theme={{
-          algorithm: mode === "light" ? defaultAlgorithm : darkAlgorithm,
+          //algorithm: mode === "light" ? defaultAlgorithm : darkAlgorithm,
           token: {
             colorPrimary: color[5],
           },

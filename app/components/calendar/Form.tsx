@@ -12,7 +12,7 @@ export default function EventForm({
     ...props
 }: FormProps) {
 
-        
+    console.log(props)
     return <Form 
         layout="vertical"
         {...props}
@@ -31,9 +31,9 @@ export default function EventForm({
                 block
                 size="large"
                 options={[
-                    { label: 'Cita', value: 'appointment' },
+                    { label: 'Cita', value: 'appt' },
                     { label: 'Tarea', value: 'task' },
-                    { label: 'Recordatorio', value: 'reminder'}
+                    { label: 'Recordatorio', value: 'rem'}
                 ]}
             />
         </Form.Item>

@@ -1,8 +1,9 @@
-import { Button, Col, Row, Segmented, Space, Tooltip, Typography } from 'antd'
+import { Button, Card, Col, Popover, Row, Segmented, Space, Tooltip, Typography } from 'antd'
 import dayjs from 'dayjs'
-import { NextIcon, PrevIcon, TodayIcon } from '../icons'
+import { CloseIcon, DeleteIcon, EditIcon, NextIcon, PrevIcon, TodayIcon } from '../icons'
 import { Navigate } from "react-big-calendar"
 import { useSearchParams } from '@remix-run/react'
+import { useState } from 'react'
 
 export const CalendarComponents = {
     toolbar({ label, localizer, onNavigate, onView, view, views }: any){
@@ -51,6 +52,39 @@ export const CalendarComponents = {
                 </Button>
             </Tooltip> 
         }
+    },
+    event: ({ event }: any) => {
+        const [open, setOpen] = useState(false)
+        return <Popover title={<Row justify="end">
+            <Col flex='auto'>
+                <Space.Compact>
+                    <Button type='link' size='small' icon={<EditIcon />}/>
+                    <Button type='link' size='small' icon={<DeleteIcon />} danger/>
+                </Space.Compact>
+            </Col>
+            <Col>
+                <Button 
+                    type="text" 
+                    size="small" 
+                    icon={<CloseIcon />}
+                    onClick={() => setOpen(false)}
+                />
+            </Col>
+        </Row>}
+            open={open}
+            content={<div>
+                
+            </div>}
+        >
+            <div
+                onClick={() => setOpen(true)}
+                style={{
+                    height: '100%',
+                }}
+            >
+                {event.title}
+            </div>
+        </Popover>
     },
 }
 
