@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@lexical/react": "^0.9.0",
-    "@refinedev/antd": "^5.11.0",
+    "@refinedev/antd": "^5.13.2",
     "@refinedev/cli": "^2.5.3",
-    "@refinedev/core": "^4.12.0",
+    "@refinedev/core": "^4.14.0",
     "@refinedev/inferencer": "^3.3.0",
     "@refinedev/kbar": "^1.1.0",
     "@refinedev/remix-router": "^2.1.0",

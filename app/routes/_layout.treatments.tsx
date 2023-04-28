@@ -2,12 +2,17 @@ import HeaderStatusField from "~/components/treatments/fields/HeaderStatusField"
 import DropdownActions from "~/components/buttons/DropdownActions"
 import { TreatmentEdit } from "~/components/treatments"
 import ShowLink from "~/components/buttons/ShowLink"
-import { useSearchParams } from "@remix-run/react"
-import { List, useTable } from "@refinedev/antd"
+import { Outlet, useSearchParams } from "@remix-run/react"
+import { List, useTable, getDefaultSortOrder } from "@refinedev/antd"
 import { Table } from "antd"
 
 export default function Page() {
-  const { tableProps } = useTable({
+  const { tableProps, } = useTable({
+    sorters: {
+      initial: [
+        { field: "id", order: "desc"}
+      ]
+    },
     meta: {
       populate: ["doctor", "patient"],
     },
@@ -23,7 +28,7 @@ export default function Page() {
             title: "Nombre",
             render: (_, record) => (
               <ShowLink recordItemId={record?.id}>{record.name}</ShowLink>
-            ),
+            )
           },
           {
             title: "Estado",
@@ -59,6 +64,7 @@ export default function Page() {
         open={!!searchParams.get("edit")}
         redirect="list"
       />
+      <Outlet />
     </List>
   );
 }

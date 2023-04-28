@@ -29,9 +29,14 @@ export const loader = async ({ request }: LoaderArgs) => {
   const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "")
   const token = parsedCookie[TOKEN_KEY]
   const mode = parsedCookie["theme"]
+  
+  // get subdomain of request
+  const subdomain = request.headers.get("host")?.split(".")[0]
+
   return json({
     token,
     mode,
+    appCode: subdomain,
   })
 }
 
@@ -65,9 +70,16 @@ export default function App() {
                 routerProvider={routerProvider}
                 authProvider={authProvider}
                 dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
-                LoginPage={AuthPage}
                 notificationProvider={notificationProvider}
                 resources={[
+                  {
+                    name: "apps",
+                    create: "/apps/create",
+                    list: "/apps",
+                    meta: {
+                      //hide: true,
+                    },
+                  },
                   {
                     name: "dc-events",
                     list: "/calendar",

@@ -1,13 +1,13 @@
 import React from "react";
 import {
-  LoginPageProps,
-  LoginFormTypes,
-  useLink,
+  RegisterPageProps,
+  RegisterFormTypes,
   useRouterType,
+  useLink,
   useActiveAuthProvider,
-  useLogin,
   useTranslate,
   useRouterContext,
+  useRegister,
 } from "@refinedev/core";
 import { ThemedTitleV2 as ThemedTitle } from "@refinedev/antd";
 import {
@@ -19,11 +19,10 @@ import {
   Form,
   Input,
   Button,
-  Checkbox,
-  CardProps,
   LayoutProps,
-  Divider,
+  CardProps,
   FormProps,
+  Divider,
   theme,
   Grid,
 } from "antd";
@@ -31,25 +30,23 @@ import {
 const { Text, Title } = Typography;
 const { useToken } = theme;
 
-type LoginProps = LoginPageProps<LayoutProps, CardProps, FormProps>;
+type RegisterProps = RegisterPageProps<LayoutProps, CardProps, FormProps>;
 /**
- * **refine** has a default login page form which is served on `/login` route when the `authProvider` configuration is provided.
+ * **refine** has register page form which is served on `/register` route when the `authProvider` configuration is provided.
  *
- * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/antd-auth-page/#login} for more details.
+ * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/antd-auth-page/#register} for more details.
  */
-export default function Login ({
+export default function RegisterPage ({
   providers,
-  registerLink,
-  forgotPasswordLink,
-  rememberMe,
-  contentProps,
+  loginLink,
   wrapperProps,
+  contentProps,
   renderContent,
   formProps,
   title,
-}: LoginProps){
+}: RegisterProps) {
   const { token } = useToken();
-  const [form] = Form.useForm<LoginFormTypes>();
+  const [form] = Form.useForm<RegisterFormTypes>();
   const translate = useTranslate();
   const routerType = useRouterType();
   const Link = useLink();
@@ -58,13 +55,9 @@ export default function Login ({
   const ActiveLink = routerType === "legacy" ? LegacyLink : Link;
 
   const authProvider = useActiveAuthProvider();
-  const { mutate: login, isLoading } = useLogin<LoginFormTypes>({
-    v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
-  });
+  const { mutate: register, isLoading } = useRegister<RegisterFormTypes>()
 
   const screens = Grid.useBreakpoint()
-  console.log(screens)
-
 
   const PageTitle =
     title === false ? null : (
@@ -87,7 +80,7 @@ export default function Login ({
         color: token.colorPrimaryTextHover,
       }}
     >
-      {translate("pages.login.title", "Iniciar sesión")}
+      {translate("pages.register.title", "Crea una cuenta")}
     </Title>
   );
 
@@ -110,7 +103,7 @@ export default function Login ({
                   marginBottom: "8px",
                 }}
                 onClick={() =>
-                  login({
+                  register({
                     providerName: provider.name,
                   })
                 }
@@ -125,7 +118,7 @@ export default function Login ({
                 color: token.colorTextLabel,
               }}
             >
-              {translate("pages.login.divider", "or")}
+              {translate("pages.login.divider", "o")}
             </Text>
           </Divider>
         </>
@@ -133,7 +126,7 @@ export default function Login ({
     }
     return null;
   };
-
+  console.log(register)
   const CardContent = (
     <Card
       title={CardTitle}
@@ -145,41 +138,48 @@ export default function Login ({
       {...(contentProps ?? {})}
     >
       {renderProviders()}
-      <Form<LoginFormTypes>
-        size="large"
+      <Form<RegisterFormTypes>
         layout="vertical"
         form={form}
-        onFinish={(values) => login(values)}
-        requiredMark={false}
-        initialValues={{
-          remember: false,
+        onFinish={(values) => {
+          const data = {
+            ...values,
+            username: values.email,
+          }
+          register(data, {
+            onSuccess: (data) => {
+              console.log(data)
+            }
+          })
         }}
+        requiredMark={false}
         {...formProps}
       >
         <Form.Item
           name="email"
-          label={translate("pages.login.fields.email", "Correo electrónico")}
+          label={translate("pages.register.email", "Correo electrónico")}
           rules={[
             { required: true },
             {
               type: "email",
               message: translate(
-                "pages.login.errors.validEmail",
+                "pages.register.errors.validEmail",
                 "El correo electrónico no es válido"
               ),
             },
           ]}
         >
           <Input
-            placeholder={translate("pages.login.fields.email", "Correo electrónico")}
+            size="large"
+            placeholder={translate("pages.register.fields.email", "Correo electrónico")}
           />
         </Form.Item>
         <Form.Item
           name="password"
-          label={translate("pages.login.fields.password", "Contraseña")}
+          label={translate("pages.register.fields.password", "Contraseña")}
           rules={[{ required: true }]}
         >
-          <Input type="password" placeholder="●●●●●●●●" />
+          <Input type="password" placeholder="●●●●●●●●" size="large" />
         </Form.Item>
         <div
           style={{
@@ -188,67 +188,48 @@ export default function Login ({
             marginBottom: "24px",
           }}
         >
-          {rememberMe ?? (
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox
-                style={{
-                  fontSize: "12px",
-                }}
-              >
-                {translate("pages.login.buttons.rememberMe", "Recuerdame")}
-              </Checkbox>
-            </Form.Item>
-          )}
-          {forgotPasswordLink ?? (
-            <ActiveLink
+          {loginLink ?? (
+            <Text
               style={{
-                color: token.colorPrimaryTextHover,
-                fontSize: "12px",
+                fontSize: 12,
                 marginLeft: "auto",
               }}
-              to="/forgot-password"
             >
-              {translate(
-                "pages.login.buttons.forgotPassword",
-                "¿Olvidaste tu contraseña?"
-              )}
-            </ActiveLink>
+              {translate("pages.login.buttons.haveAccount", "¿Tienes una cuenta?")}{" "}
+              <ActiveLink
+                style={{
+                  fontWeight: "bold",
+                  color: token.colorPrimaryTextHover,
+                }}
+                to="/login"
+              >
+                {translate("pages.login.signin", "Iniciar sesión")}
+              </ActiveLink>
+            </Text>
           )}
         </div>
-        <Form.Item>
+
+        <Form.Item
+          style={{
+            marginBottom: 0,
+          }}
+        >
           <Button
             type="primary"
+            size="large"
             htmlType="submit"
             loading={isLoading}
             block
           >
-            {translate("pages.login.signin", "Iniciar sesión")}
+            {translate("pages.register.buttons.submit", "Registrate")}
           </Button>
         </Form.Item>
       </Form>
-      <div style={{ marginTop: 8 }}>
-        {registerLink ?? (
-          <Text style={{ fontSize: 12 }}>
-            {translate(
-              "pages.login.buttons.noAccount",
-              "¿No tienes una cuenta?"
-            )}{" "}
-            <ActiveLink
-              to="/register"
-              style={{
-                fontWeight: "bold",
-                color: token.colorPrimaryTextHover,
-              }}
-            >
-              {translate("pages.login.signup", "Registrate")}
-            </ActiveLink>
-          </Text>
-        )}
-      </div>
     </Card>
   );
 
-  return <Layout>
+  return (
+    <Layout {...(wrapperProps ?? {})}>
       <Row
         justify="center"
         align="middle"
@@ -279,4 +260,5 @@ export default function Login ({
         </Col>
       </Row>
     </Layout>
-}
+  );
+};

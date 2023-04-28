@@ -3,11 +3,7 @@ import { useActiveAuthProvider, useGetIdentity } from "@refinedev/core"
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd"
 import { createStyles } from "antd-style"
 
-const useStyles = createStyles(({token} : any) => ({
-  header: {
-    backgroundColor: 'transparent',
-  }
-}))
+
 
 
 const { Text } = Typography;
@@ -17,7 +13,6 @@ export default function ThemedHeaderV2 (
   props: RefineThemedLayoutV2HeaderProps
 ) {
   const { token } = useToken()
-  const { styles } = useStyles()
   const authProvider = useActiveAuthProvider()
   const { data: user } = useGetIdentity({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
@@ -25,7 +20,9 @@ export default function ThemedHeaderV2 (
 
   return (
     <AntdLayout.Header
-      className={styles.header}
+      style={{
+        backgroundColor: 'transparent'
+      }}
     >
       <Space>
         <Space size="middle">

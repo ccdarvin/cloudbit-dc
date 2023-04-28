@@ -5,16 +5,18 @@ import { useSearchParams } from "@remix-run/react"
 
 export default function PatientEdit({
     open,
+    id,
     redirect,
 }: {
     open: boolean,
+    id: string,
     redirect?: 'show' | 'edit' | 'create' | 'list',
     initialData?: any
 }) {
     const [searchParams] = useSearchParams()
     const { formProps, saveButtonProps } = useForm({
         action: "edit",
-        id: searchParams.get('id') || undefined,
+        id: id,
         redirect,
         meta: {
             populate: ['avatar'],

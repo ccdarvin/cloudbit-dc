@@ -9,7 +9,14 @@ import {
   useTranslate,
   useRouterContext,
 } from "@refinedev/core";
-import { ThemedTitleV2 as ThemedTitle } from "@refinedev/antd";
+import { ThemedTitle } from "@refinedev/antd";
+import {
+  bodyStyles,
+  containerStyles,
+  headStyles,
+  layoutStyles,
+  titleStyles,
+} from "./styles";
 import {
   Row,
   Col,
@@ -25,7 +32,6 @@ import {
   Divider,
   FormProps,
   theme,
-  Grid,
 } from "antd";
 
 const { Text, Title } = Typography;
@@ -37,7 +43,7 @@ type LoginProps = LoginPageProps<LayoutProps, CardProps, FormProps>;
  *
  * @see {@link https://refine.dev/docs/ui-frameworks/antd/components/antd-auth-page/#login} for more details.
  */
-export default function Login ({
+export const LoginPage: React.FC<LoginProps> = ({
   providers,
   registerLink,
   forgotPasswordLink,
@@ -47,7 +53,7 @@ export default function Login ({
   renderContent,
   formProps,
   title,
-}: LoginProps){
+}) => {
   const { token } = useToken();
   const [form] = Form.useForm<LoginFormTypes>();
   const translate = useTranslate();
@@ -61,10 +67,6 @@ export default function Login ({
   const { mutate: login, isLoading } = useLogin<LoginFormTypes>({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
-
-  const screens = Grid.useBreakpoint()
-  console.log(screens)
-
 
   const PageTitle =
     title === false ? null : (
@@ -85,9 +87,10 @@ export default function Login ({
       level={3}
       style={{
         color: token.colorPrimaryTextHover,
+        ...titleStyles,
       }}
     >
-      {translate("pages.login.title", "Iniciar sesión")}
+      {translate("pages.login.title", "Sign in to your account")}
     </Title>
   );
 
@@ -137,16 +140,16 @@ export default function Login ({
   const CardContent = (
     <Card
       title={CardTitle}
+      headStyle={headStyles}
+      bodyStyle={bodyStyles}
       style={{
+        ...containerStyles,
         backgroundColor: token.colorBgElevated,
-        maxWidth: "400px",
-        margin: "0 auto",
       }}
       {...(contentProps ?? {})}
     >
       {renderProviders()}
       <Form<LoginFormTypes>
-        size="large"
         layout="vertical"
         form={form}
         onFinish={(values) => login(values)}
@@ -158,28 +161,29 @@ export default function Login ({
       >
         <Form.Item
           name="email"
-          label={translate("pages.login.fields.email", "Correo electrónico")}
+          label={translate("pages.login.fields.email", "Email")}
           rules={[
             { required: true },
             {
               type: "email",
               message: translate(
                 "pages.login.errors.validEmail",
-                "El correo electrónico no es válido"
+                "Invalid email address"
               ),
             },
           ]}
         >
           <Input
-            placeholder={translate("pages.login.fields.email", "Correo electrónico")}
+            size="large"
+            placeholder={translate("pages.login.fields.email", "Email")}
           />
         </Form.Item>
         <Form.Item
           name="password"
-          label={translate("pages.login.fields.password", "Contraseña")}
+          label={translate("pages.login.fields.password", "Password")}
           rules={[{ required: true }]}
         >
-          <Input type="password" placeholder="●●●●●●●●" />
+          <Input type="password" placeholder="●●●●●●●●" size="large" />
         </Form.Item>
         <div
           style={{
@@ -195,7 +199,7 @@ export default function Login ({
                   fontSize: "12px",
                 }}
               >
-                {translate("pages.login.buttons.rememberMe", "Recuerdame")}
+                {translate("pages.login.buttons.rememberMe", "Remember me")}
               </Checkbox>
             </Form.Item>
           )}
@@ -210,7 +214,7 @@ export default function Login ({
             >
               {translate(
                 "pages.login.buttons.forgotPassword",
-                "¿Olvidaste tu contraseña?"
+                "Forgot password?"
               )}
             </ActiveLink>
           )}
@@ -218,11 +222,12 @@ export default function Login ({
         <Form.Item>
           <Button
             type="primary"
+            size="large"
             htmlType="submit"
             loading={isLoading}
             block
           >
-            {translate("pages.login.signin", "Iniciar sesión")}
+            {translate("pages.login.signin", "Sign in")}
           </Button>
         </Form.Item>
       </Form>
@@ -231,7 +236,7 @@ export default function Login ({
           <Text style={{ fontSize: 12 }}>
             {translate(
               "pages.login.buttons.noAccount",
-              "¿No tienes una cuenta?"
+              "Don’t have an account?"
             )}{" "}
             <ActiveLink
               to="/register"
@@ -240,7 +245,7 @@ export default function Login ({
                 color: token.colorPrimaryTextHover,
               }}
             >
-              {translate("pages.login.signup", "Registrate")}
+              {translate("pages.login.signup", "Sign up")}
             </ActiveLink>
           </Text>
         )}
@@ -248,7 +253,8 @@ export default function Login ({
     </Card>
   );
 
-  return <Layout>
+  return (
+    <Layout style={layoutStyles} {...(wrapperProps ?? {})}>
       <Row
         justify="center"
         align="middle"
@@ -256,10 +262,7 @@ export default function Login ({
           height: "100vh",
         }}
       >
-        <Col style={{
-          padding: "0 24px",
-          minWidth: "30%",
-        }}>
+        <Col xs={22}>
           {renderContent ? (
             renderContent(CardContent, PageTitle)
           ) : (
@@ -269,14 +272,7 @@ export default function Login ({
             </>
           )}
         </Col>
-        <Col flex='auto'
-          style={{
-            display: screens.xs ? "none" : "block",
-            height: "100vh",
-            backgroundColor: token.colorPrimaryActive,
-          }}
-        >
-        </Col>
       </Row>
     </Layout>
-}
+  );
+};

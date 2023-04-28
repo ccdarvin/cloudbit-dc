@@ -50,15 +50,26 @@ export default function Patients() {
                     },
                     {
                         dataIndex: "actions",
-                        render: (_, record) => <DropdownActions recordItemId={record.id} />
+                        render: (_, record) => <DropdownActions 
+                            recordItemId={record.id}
+                            editItem={{
+                                url: () => {
+                                    searchParams.set('edit', record.id as string)
+                                    return `?${searchParams.toString()}`
+                                }
+                            }} 
+                        />
                     }
                 ]}
             />
         </List>
         <Outlet />
-        <PatientEdit 
-            open={searchParams.get('action')==='edit'}
-            redirect="show"
-        />
+        {
+            !!searchParams.get('edit') && <PatientEdit
+                open={true}
+                id={searchParams.get('edit')!}
+                redirect="show"
+            />
+        }
     </div>
 }

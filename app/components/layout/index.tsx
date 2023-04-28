@@ -8,11 +8,12 @@ import DefaultSider from "./Sider";
 export default function ThemedLayoutV2({
   children,
   Header,
+  hasSider=true,
   Sider,
   Title,
   Footer,
   OffLayoutArea,
-}: RefineThemedLayoutV2Props) {
+}: RefineThemedLayoutV2Props & { hasSider?: boolean }) {
   const breakpoint = Grid.useBreakpoint();
   const SiderToRender = Sider ?? DefaultSider;
   const HeaderToRender = Header ?? DefaultHeader;
@@ -20,8 +21,8 @@ export default function ThemedLayoutV2({
 
   return (
     <ThemedLayoutContextProvider >
-      <AntdLayout hasSider style={{ minHeight: "100vh", display: "flex" }}>
-        <SiderToRender Title={Title} />
+      <AntdLayout hasSider={hasSider} style={{ minHeight: "100vh", display: "flex" }}>
+        {hasSider? <SiderToRender Title={Title} />: <div></div>}
         <AntdLayout>
           <HeaderToRender />
           <AntdLayout.Content>
