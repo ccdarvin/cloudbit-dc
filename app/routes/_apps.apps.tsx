@@ -1,6 +1,6 @@
 
-import { Edit, useSimpleList } from "@refinedev/antd"
-import { Button, Card, List, Typography } from "antd"
+import { Edit, List, useSimpleList } from "@refinedev/antd"
+import { Button, Card, List as ListAnt, Typography } from "antd"
 import EditButton from "~/components/buttons/EditButton"
 import DropdownActions from "~/components/buttons/DropdownActions"
 import { useSearchParams } from "@remix-run/react"
@@ -19,12 +19,13 @@ export default function AppPage () {
     }
 
 
-    return <div>
-        <Typography.Title>Mis Aplicaciones</Typography.Title>
-        <List 
+    return <List
+        title="Mis aplicaciones"
+    >
+        <ListAnt 
             grid={{ gutter: 16, column: 4 }}
             dataSource={queryResult?.data?.data}
-            renderItem={item => <List.Item>
+            renderItem={item => <ListAnt.Item>
                 <Card title={item.name}
                     actions={[
                         <Button type="link" href={item.url} onClick={()=> {}}>Ir a app</Button>,
@@ -43,8 +44,8 @@ export default function AppPage () {
                         />,
                     ]}
                 />
-            </List.Item>
+            </ListAnt.Item>
             }
         />
-    </div>
+    </List>
 }
