@@ -70,7 +70,6 @@ export default function CalendarPage() {
             defaultView={searchParams.get('view') as View || 'week'}
             onSelectSlot={(slotInfo, ...props) => {
                 setIsCreateOpen(true)
-                console.log(slotInfo)
                 setInitialValues({
                     date: dayjs(slotInfo.start).format('YYYY-MM-DD'),
                     time: dayjs(slotInfo.start).format('HH:mm:ss.SSS'),
@@ -79,10 +78,13 @@ export default function CalendarPage() {
                 })
             }}
             resourceIdAccessor="resourceId"
-            resources={resourceMap}
+            resources={searchParams.get('view') !== 'week'? resourceMap: undefined}
             resourceTitleAccessor="resourceTitle"
             selectable
             popup={false}
+            onView={(view) => {
+                console.log(view)
+            }}
         />
         {isCreateOpen &&
             <EventCreate 

@@ -15,7 +15,8 @@ import {
   pickNotDeprecated,
   useWarnAboutChange,
 } from "@refinedev/core";
-import { ThemedTitleV2, useSiderVisible } from "@refinedev/antd";
+import { useSiderVisible } from "@refinedev/antd"
+import ThemedTitleV2 from "./Title"
 import {
   DashboardOutlined,
   LogoutOutlined,
@@ -250,7 +251,7 @@ export default function ThemedSiderV2 ({
                   backgroundColor: token.colorBgElevated,
                 }}
               >
-                <RenderToTitle collapsed={false} />
+                <RenderToTitle collapsed={false}  size="small" />
               </div>
               {renderMenu()}
             </Layout.Sider>

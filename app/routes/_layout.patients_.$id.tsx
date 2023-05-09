@@ -1,25 +1,16 @@
 
-import {
-    Button,
-    Card,
-    Descriptions,
-    Divider,
-    Space,
-    Tabs,
-    Typography,
-} from "antd"
-
-import { Link, Outlet,  useParams, useSearchParams } from "@remix-run/react"
+import {Button, Card, Descriptions, Divider, Space, Tabs, Typography} from "antd"
+import { Outlet,  useParams, useSearchParams } from "@remix-run/react"
 import TreatmentTable from "~/components/patients/TreatmentsTable"
-import { AppointmentIcon, NoteIcon, TaskIcon, TreatmentIcon, UserIcon } from "~/components/icons"
+import { AppointmentIcon, NoteIcon, TaskIcon, TreatmentIcon } from "~/components/icons"
 import { Show } from "~/components/crud/Show"
 import { useShow } from "@refinedev/core"
 import type { TabsProps } from 'antd'
 import dayjs from "dayjs"
-import NoteCreate from "~/components/note/NoteCreate"
-import NoteList from "~/components/note/NoteList"
+import NoteCreate from "~/components/notes/NoteCreate"
+import NoteList from "~/components/notes/NoteList"
 import AvatarField from "~/components/fields/AvatarField"
-import NoteEdit from "~/components/note/NoteEdit"
+import NoteEdit from "~/components/notes/NoteEdit"
 
 
 

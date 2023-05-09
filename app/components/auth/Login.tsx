@@ -1,4 +1,3 @@
-import React from "react";
 import {
   LoginPageProps,
   LoginFormTypes,
@@ -9,7 +8,7 @@ import {
   useTranslate,
   useRouterContext,
 } from "@refinedev/core";
-import { ThemedTitleV2 as ThemedTitle } from "@refinedev/antd";
+import ThemedTitle from "~/components/layout/Title"
 import {
   Row,
   Col,
@@ -28,8 +27,8 @@ import {
   Grid,
 } from "antd";
 
-const { Text, Title } = Typography;
-const { useToken } = theme;
+const { Text, Title } = Typography
+const { useToken } = theme
 
 type LoginProps = LoginPageProps<LayoutProps, CardProps, FormProps>;
 /**
@@ -63,8 +62,6 @@ export default function Login ({
   });
 
   const screens = Grid.useBreakpoint()
-  console.log(screens)
-
 
   const PageTitle =
     title === false ? null : (

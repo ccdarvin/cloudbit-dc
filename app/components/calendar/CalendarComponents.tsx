@@ -1,4 +1,4 @@
-import { Button, Card, Col, Popover, Row, Segmented, Space, Tooltip, Typography } from 'antd'
+import { Button, Col, Popover, Row, Segmented, Space, Tooltip, Typography } from 'antd'
 import dayjs from 'dayjs'
 import { CloseIcon, DeleteIcon, EditIcon, NextIcon, PrevIcon, TodayIcon } from '../icons'
 import { Navigate } from "react-big-calendar"

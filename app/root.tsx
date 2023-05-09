@@ -1,7 +1,7 @@
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from "@remix-run/react";
 import { CalendarIcon, PatientIcon, SettingsIcon, TreatmentIcon } from "./components/icons"
 import routerProvider, { UnsavedChangesNotifier } from "@refinedev/remix-router"
-import { AuthPage, notificationProvider } from "@refinedev/antd"
+import { notificationProvider } from "@refinedev/antd"
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar"
 import { authProvider, axiosInstance } from "~/authProvider"
 import localizedFormat from "dayjs/plugin/localizedFormat"
@@ -21,22 +21,14 @@ dayjs.extend(localizedFormat)
 dayjs.extend(timezone)
 dayjs.locale('es')
 
-export const headers: HeadersFunction = () => ({
-  'Accept-CH': 'Sec-CH-Prefers-Color-Scheme',
-})
-
 export const loader = async ({ request }: LoaderArgs) => {
   const parsedCookie = cookie.parse(request.headers.get("Cookie") ?? "")
   const token = parsedCookie[TOKEN_KEY]
   const mode = parsedCookie["theme"]
-  
-  // get subdomain of request
-  const subdomain = request.headers.get("host")?.split(".")[0]
 
   return json({
     token,
     mode,
-    appCode: subdomain,
   })
 }
 

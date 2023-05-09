@@ -3,11 +3,11 @@ import { Edit, List, useSimpleList } from "@refinedev/antd"
 import { Button, Card, List as ListAnt, Typography } from "antd"
 import EditButton from "~/components/buttons/EditButton"
 import DropdownActions from "~/components/buttons/DropdownActions"
-import { useSearchParams } from "@remix-run/react"
+import { Outlet, useSearchParams } from "@remix-run/react"
 
 export default function AppPage () {
 
-    const { queryResult } = useSimpleList({})
+    const { queryResult, listProps } = useSimpleList({})
     const [searchParams, setSearchParams] = useSearchParams()
 
     const getAppUrl = (appCode: string) => {
@@ -23,6 +23,7 @@ export default function AppPage () {
         title="Mis aplicaciones"
     >
         <ListAnt 
+            {...listProps}
             grid={{ gutter: 16, column: 4 }}
             dataSource={queryResult?.data?.data}
             renderItem={item => <ListAnt.Item>
@@ -47,5 +48,6 @@ export default function AppPage () {
             </ListAnt.Item>
             }
         />
+        <Outlet />
     </List>
 }
