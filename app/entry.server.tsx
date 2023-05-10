@@ -4,6 +4,7 @@ import { Response } from "@remix-run/node"
 import { RemixServer } from "@remix-run/react"
 import { renderToPipeableStream } from "react-dom/server"
 import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs'
+import { extractStaticStyle, StyleProvider as StyleProviderStyle } from 'antd-style'
 
 
 const ABORT_DELAY = 5000;
@@ -19,23 +20,26 @@ export default function handleRequest(
     const cache = createCache()
 
     let { pipe, abort } = renderToPipeableStream(
+      <StyleProviderStyle cache={extractStaticStyle.cache}>
         <StyleProvider cache={cache}>
           <RemixServer context={remixContext} url={request.url} />
-        </StyleProvider>,
+        </StyleProvider>
+      </StyleProviderStyle>,
       {
         onShellReady: () => {
           const styleText = extractStyle(cache)
           let body = new PassThrough({
             transform: (chunk, _, callback) => {
               // add styles to response
+              const styles = extractStaticStyle(chunk.toString()).map((item) => item.style)
 
               if (chunk.toString().match(/__STYLES__/) && styleText) {
-                chunk = chunk.toString().replace(/__STYLES__/, styleText)
+                chunk = chunk.toString().replace(/__STYLES__/, styleText + styles.join(''))
               }
               return callback(null, chunk)
             }
           })
-          responseHeaders.set("Content-Type", "text/html");
+          responseHeaders.set("Content-Type", "text/html")
           resolve(
             new Response(body, {
               headers: responseHeaders,

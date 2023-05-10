@@ -16,4 +16,13 @@ module.exports = {
     v2_errorBoundary: true,
     v2_normalizeFromMethod: true,
   },
+  postcss: true,
+  tailwind: true,
+  //vercel
+  publicPath: "/build/", // default value, can be removed
+  serverBuildPath: "api/index.js",
+  serverMainFields: ["main", "module"], // default value, can be removed
+  serverMinify: false, // default value, can be removed
+  serverModuleFormat: "cjs", // default value, can be removed
+  serverPlatform: "node", // default value, can be removed
 };
