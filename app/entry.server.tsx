@@ -1,10 +1,10 @@
-import { PassThrough } from "stream"
-import type { EntryContext } from "@remix-run/node"
-import { Response } from "@remix-run/node"
-import { RemixServer } from "@remix-run/react"
-import { renderToPipeableStream } from "react-dom/server"
-import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs'
 import { extractStaticStyle, StyleProvider as StyleProviderStyle } from 'antd-style'
+import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs'
+import { renderToPipeableStream } from "react-dom/server"
+import type { EntryContext } from '@vercel/remix'
+import { RemixServer } from "@remix-run/react"
+import { Response } from "@remix-run/node"
+import { PassThrough } from "stream"
 
 
 const ABORT_DELAY = 5000;
@@ -40,6 +40,7 @@ export default function handleRequest(
             }
           })
           responseHeaders.set("Content-Type", "text/html")
+          responseHeaders.set("Cache-Control", "public, max-age=0, must-revalidate")
           resolve(
             new Response(body, {
               headers: responseHeaders,
