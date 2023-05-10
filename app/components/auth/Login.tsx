@@ -7,8 +7,7 @@ import {
   useLogin,
   useTranslate,
   useRouterContext,
-} from "@refinedev/core";
-import ThemedTitle from "~/components/layout/Title"
+} from "@refinedev/core"
 import {
   Row,
   Col,
@@ -26,8 +25,8 @@ import {
   theme,
   Grid,
 } from "antd";
+import ThemedTitleV2 from "../Layout/Title";
 
-const { Text, Title } = Typography
 const { useToken } = theme
 
 type LoginProps = LoginPageProps<LayoutProps, CardProps, FormProps>;
@@ -73,19 +72,19 @@ export default function Login ({
           fontSize: "20px",
         }}
       >
-        {title ?? <ThemedTitle collapsed={false} />}
+        {title ?? <ThemedTitleV2 collapsed={false} />}
       </div>
     );
 
   const CardTitle = (
-    <Title
+    <Typography.Title
       level={3}
       style={{
         color: token.colorPrimaryTextHover,
       }}
     >
       {translate("pages.login.title", "Iniciar sesión")}
-    </Title>
+    </Typography.Title>
   );
 
   const renderProviders = () => {
@@ -117,13 +116,13 @@ export default function Login ({
             );
           })}
           <Divider>
-            <Text
+            <Typography.Text
               style={{
                 color: token.colorTextLabel,
               }}
             >
               {translate("pages.login.divider", "or")}
-            </Text>
+            </Typography.Text>
           </Divider>
         </>
       );
@@ -225,7 +224,7 @@ export default function Login ({
       </Form>
       <div style={{ marginTop: 8 }}>
         {registerLink ?? (
-          <Text style={{ fontSize: 12 }}>
+          <Typography.Text style={{ fontSize: 12 }}>
             {translate(
               "pages.login.buttons.noAccount",
               "¿No tienes una cuenta?"
@@ -239,7 +238,7 @@ export default function Login ({
             >
               {translate("pages.login.signup", "Registrate")}
             </ActiveLink>
-          </Text>
+          </Typography.Text>
         )}
       </div>
     </Card>

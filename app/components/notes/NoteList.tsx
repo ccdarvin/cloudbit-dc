@@ -2,7 +2,7 @@ import { Table } from "antd"
 import { useTable } from "@refinedev/antd"
 import { useEffect } from "react"
 import { useSearchParams } from "@remix-run/react"
-import DropdownActions from "~/components/buttons/DropdownActions"
+import DropdownActions from "../buttons/DropdownActions"
 
 
 export default function NoteList({

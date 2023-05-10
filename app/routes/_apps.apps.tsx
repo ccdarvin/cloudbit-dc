@@ -1,9 +1,8 @@
 
 import { Edit, List, useSimpleList } from "@refinedev/antd"
-import { Button, Card, List as ListAnt, Typography } from "antd"
-import EditButton from "~/components/buttons/EditButton"
-import DropdownActions from "~/components/buttons/DropdownActions"
+import { Button, Card, List as ListAnt } from "antd"
 import { Outlet, useSearchParams } from "@remix-run/react"
+import DropdownActions from "~/components/buttons/DropdownActions"
 
 export default function AppPage () {
 
